@@ -1,0 +1,11 @@
+.example-card {
+  max-width: 400px;
+}
+
+.temperature-value {
+  font-size: 100px;
+}
+
+.temperature-title {
+  font-size: 30px;
+}

@@ -1,0 +1,5 @@
+pom.xml
+src/
+target/
+
+!target/weather-dashboard.jar

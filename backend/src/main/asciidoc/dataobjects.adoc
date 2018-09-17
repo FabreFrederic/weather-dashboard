@@ -1,0 +1,28 @@
+= Cheatsheets
+
+[[Sensor]]
+== Sensor
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|===
+
+[[Temperature]]
+== Temperature
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[date]]`date`|`String`|-
+|[[id]]`id`|`String`|-
+|[[sensorEnvironment]]`sensorEnvironment`|`link:enums.html#SensorEnvironment[SensorEnvironment]`|-
+|[[value]]`value`|`Number (long)`|-
+|===
+
