@@ -71,8 +71,10 @@ eventBus.onopen = async () => {
 function sendValueToEventBus(value, date, address, sensorEnvironment, sensorType) {
     eventBus.publish(address, '{"date":"' + date +
         '" ,"value":' + value +
-        ' ,"sensorEnvironment":' + sensorEnvironment +
-        ' ,"sensorType":' + sensorType + '}');
+        ' ,"sensorEnvironment":' + '"' + sensorEnvironment + '"' +
+        ' ,"sensorType":' + '"' + sensorType + '"' + '}');
 
-    console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
+    console.log('sendValueToEventBus - value : ' + value +
+        ' - sensor type : ' + sensorType +
+        ' - address : ' + address);
 }

@@ -32,7 +32,8 @@ public class ServerVerticle extends AbstractVerticle {
                 .addOutboundPermitted(
                         new PermittedOptions().setAddress(EventBusAddress.WATER_TEMPERATURE_MAX_ADDRESS.getValue()));
 
-        SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
+        SockJSHandler ebHandler = SockJSHandler.create(vertx);
+        ebHandler.bridge(opts);
 
         router.route("/eventbus/*").handler(ebHandler);
         router.route().handler(StaticHandler.create());

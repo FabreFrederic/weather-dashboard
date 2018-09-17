@@ -49,10 +49,12 @@ export class VertXEventBusService implements OnDestroy {
   }
 
   private airTemperatureCallback = (error: any, message: any) => {
+    console.error(message);
+
     if (error) {
       console.error(error);
     } else if (message && message.body) {
-      const body = JSON.parse(message.body);
+      const body = JSON.parse(message.body.toString());
 
       console.log(body.value);
 
@@ -91,6 +93,8 @@ export class VertXEventBusService implements OnDestroy {
   };
 
   private waterTemperatureCallback = (error: any, message: any) => {
+    console.error(message);
+
     if (error) {
       console.error(error);
     } else if (message && message.body) {
