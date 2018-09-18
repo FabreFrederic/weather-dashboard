@@ -10,7 +10,7 @@ let airHumidity;
 
 const waterTemperatureAddress = 'water.temperature.address';
 const airTemperatureAddress = 'air.temperature.address';
-const eventBus = new EventBus('http:localhost:8080/eventbus');
+const eventBus = new EventBus('http://localhost:8080/eventbus');
 
 eventBus.onclose = (param) => {
     console.log('closed event bus', param)
@@ -54,6 +54,6 @@ serialport.on('close', function (err) {
     console.log('serial port closed', err);
 });
 
-serialPort.on('open', function () {
+serialport.on('open', function () {
     console.log('serial port open');
-}
+});
