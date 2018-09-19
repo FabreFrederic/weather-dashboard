@@ -19,7 +19,7 @@ public class MongoVerticle extends AbstractVerticle {
 
 	@Override
 	public void start() throws Exception {
-		LOGGER.info("Mongo verticle is starting");
+		LOGGER.info("This verticle is starting");
 		ConfigStoreOptions file = new ConfigStoreOptions().setType("file").
 				setConfig(new JsonObject().put("path", "application.json"));
 		ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(file));

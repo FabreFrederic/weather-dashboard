@@ -13,10 +13,12 @@ export class SensorDataCardComponent implements OnInit {
   @Input()
   public subtitle: string;
   @Input()
-  public value: number;
+  public waterTemperatureNewValue: number;
+  @Input()
+  public airTemperatureNewValue: number;
 
   constructor(private vertXEventBusService: VertXEventBusService) {
-    vertXEventBusService.initialize(this.newValueCallback);
+    vertXEventBusService.initialize(this.waterTemperatureNewValueCallback, this.airTemperatureNewValueCallback);
   }
 
   ngOnInit() {
@@ -27,12 +29,26 @@ export class SensorDataCardComponent implements OnInit {
    * @param {*} error Error message
    * @param {*} message Response message
    */
-  public newValueCallback = (error: any, message: any) => {
+  public waterTemperatureNewValueCallback = (error: any, message: any) => {
     if (error) {
       console.error(error);
     } else {
       console.log('message : ' + message);
-      this.value = message.body.value;
+      this.waterTemperatureNewValue = message.body.value;
+    }
+  }
+
+  /**
+   * Vert.X event bus new value callback
+   * @param {*} error Error message
+   * @param {*} message Response message
+   */
+  public airTemperatureNewValueCallback = (error: any, message: any) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('message : ' + message);
+      this.airTemperatureNewValue = message.body.value;
     }
   }
 

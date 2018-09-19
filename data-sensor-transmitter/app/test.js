@@ -6,10 +6,12 @@ const eventBus = new EventBus('http://localhost:8080/eventbus');
 
 eventBus.onopen = () => {
     console.log('open event bus');
-    let value = Math.floor(Math.random() * 6) + 1;
-    eventBus.publish(waterTemperatureAddress, '{"value":' + value + ',"sensorEnvironment":"WATER"}');
-    eventBus.publish(airTemperatureAddress, '{"value":' + value + ',"sensorEnvironment":"AIR"}');
-    console.log('value : ' + value);
+    let waterValue = Math.floor(Math.random() * 6) + 1;
+    let airValue = Math.floor(Math.random() * 6) + 1;
+    eventBus.publish(waterTemperatureAddress, '{"value":' + waterValue + ',"sensorEnvironment":"WATER"}');
+    eventBus.publish(airTemperatureAddress, '{"value":' + airValue + ',"sensorEnvironment":"AIR"}');
+    console.log('waterValue : ' + waterValue);
+    console.log('airValue : ' + airValue);
 }
 
 eventBus.onclose = (param) => {

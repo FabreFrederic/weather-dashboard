@@ -16,12 +16,12 @@ public class WaterTemperatureVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        LOGGER.info("Temperature verticle is starting");
+        LOGGER.info("This verticle is starting");
         final TemperatureRepository repository = TemperatureRepository.createProxy(vertx, MONGO_SERVICE);
 
         vertx.eventBus().consumer(WATER_TEMPERATURE_ADDRESS, message -> {
             LOGGER.info("Message receive by the consumer : {}", message.body());
-            Temperature temperature = Json.decodeValue(message.body().toString(), Temperature.class);
+            final Temperature temperature = Json.decodeValue(message.body().toString(), Temperature.class);
 
             // Save temperature in mongodb
             repository.save(temperature, res -> {

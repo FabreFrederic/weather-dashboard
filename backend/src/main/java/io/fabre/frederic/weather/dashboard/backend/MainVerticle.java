@@ -16,5 +16,6 @@ public class MainVerticle extends AbstractVerticle {
         vertx.deployVerticle(MongoVerticle.class.getName());
         vertx.deployVerticle(ServerVerticle.class.getName());
         vertx.deployVerticle(WaterTemperatureVerticle.class.getName());
+        vertx.deployVerticle(AirTemperatureVerticle.class.getName());
     }
 }
