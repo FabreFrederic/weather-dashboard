@@ -5,7 +5,7 @@ declare var EventBus: any;
 export const VERTX_EVENTBUS_CONFIG = {
   eventBusRoute: window.location.protocol + '//' + window.location.hostname + ':8080/eventbus',
   waterAddress: 'water.temperature.frontend.address',
-  airAddress: 'air.temperature.frontend.address'
+  airAddress: 'air.temperature.frontend.address',
 };
 
 @Injectable()
