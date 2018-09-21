@@ -11,13 +11,16 @@ import {MatSelectModule} from '@angular/material/select';
 import {SensorDataCardComponent} from './sensor-data-card/sensor-data-card.component';
 import {VertXEventBusService} from './vertx/vertXEventBus.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {HighchartsChartModule} from 'highcharts-angular';
+import {ChartComponent} from './chart/chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemperatureComponent,
     SensorDataCardComponent,
-    DashboardComponent
+    DashboardComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,8 @@ import {DashboardComponent} from './dashboard/dashboard.component';
     MatIconModule,
     MatListModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    HighchartsChartModule
   ],
   providers: [
     VertXEventBusService
