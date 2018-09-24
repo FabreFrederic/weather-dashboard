@@ -32,7 +32,7 @@ eventBus.onopen = () => {
                     break;
                 case '*at*':
                     airTemperature = dataSensor.substring(4, dataSensor.length - 1);
-                    sendValueToEventBus(waterTemperature, airTemperature);
+                    sendValueToEventBus(airTemperature, airTemperatureAddress);
                     break;
                 case '*ap*':
                     break;

@@ -1,11 +1,12 @@
-.example-card {
-  max-width: 400px;
+.card {
+  width: 300px;
+  margin: 10px;
 }
 
-.value {
+.card-value {
   font-size: 100px;
 }
 
-.title {
+.card-title {
   font-size: 30px;
 }

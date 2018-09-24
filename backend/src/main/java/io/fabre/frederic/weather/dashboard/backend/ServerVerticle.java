@@ -11,18 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ServerVerticle extends AbstractVerticle {
-    private static final String waterTemperatureAddress = "water.temperature.address";
-    private static final String airTemperatureAddress = "air.temperature.address";
+    private static final String WATER_TEMPERATURE_ADDRESS = "water.temperature.address";
+    private static final String AIR_TEMPERATURE_ADDRESS = "air.temperature.address";
     private static final String WATER_TEMPERATURE_FRONTEND_ADDRESS = "water.temperature.frontend.address";
+    private static final String AIR_TEMPERATURE_FRONTEND_ADDRESS = "air.temperature.frontend.address";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerVerticle.class);
 
     public void start(Future<Void> fut) {
         Router router = Router.router(vertx);
         BridgeOptions opts = new BridgeOptions()
-                .addInboundPermitted(new PermittedOptions().setAddress(waterTemperatureAddress))
-                .addInboundPermitted(new PermittedOptions().setAddress(airTemperatureAddress))
-                .addOutboundPermitted(new PermittedOptions().setAddress(WATER_TEMPERATURE_FRONTEND_ADDRESS));
+                .addInboundPermitted(new PermittedOptions().setAddress(WATER_TEMPERATURE_ADDRESS))
+                .addInboundPermitted(new PermittedOptions().setAddress(AIR_TEMPERATURE_ADDRESS))
+                .addOutboundPermitted(new PermittedOptions().setAddress(WATER_TEMPERATURE_FRONTEND_ADDRESS))
+                .addOutboundPermitted(new PermittedOptions().setAddress(AIR_TEMPERATURE_FRONTEND_ADDRESS));
 
         SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
 

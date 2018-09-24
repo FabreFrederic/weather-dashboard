@@ -13,7 +13,7 @@ public class PingVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        LOGGER.info("Ping verticle is starting");
+        LOGGER.info("This verticle is starting");
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
         router.get("/ping").handler(this::handleDefault);
