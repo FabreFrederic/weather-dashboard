@@ -27,11 +27,11 @@ eventBus.onopen = () => {
 
             switch (sensorType) {
                 case '*wt*':
-                    waterTemperature = dataSensor.substring(4, dataSensor.length - 1);
+                    waterTemperature = dataSensor.substring(4, dataSensor.length);
                     sendValueToEventBus(waterTemperature, waterTemperatureAddress);
                     break;
                 case '*at*':
-                    airTemperature = dataSensor.substring(4, dataSensor.length - 1);
+                    airTemperature = dataSensor.substring(4, dataSensor.length);
                     sendValueToEventBus(airTemperature, airTemperatureAddress);
                     break;
                 case '*ap*':
@@ -47,7 +47,7 @@ eventBus.onopen = () => {
 
 function sendValueToEventBus(value, address) {
     eventBus.publish(address, '{"value":' + value + '}');
-    console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
+    // console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
 }
 
 serialport.on('close', function (err) {
