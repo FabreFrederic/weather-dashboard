@@ -19,6 +19,12 @@ export class ChartComponent implements OnInit {
 
   constructor(private vertXEventBusService: VertXEventBusService) {
     this.Highcharts = Highcharts;
+    Highcharts.setOptions({
+      global : {
+        timezoneOffset : new Date().getTimezoneOffset()
+      }
+    });
+
     this.chartOptions = {
       title: {
         text: null
@@ -69,9 +75,9 @@ export class ChartComponent implements OnInit {
     if (error) {
       console.error(error);
     } else {
-      console.log(this.Highcharts);
+      console.log('message.body.value : ' + message.body.value);
       this.Highcharts.charts[0].series[0].addPoint([+new Date(),
-        message.body.value], true, false);
+        +message.body.value], true, false);
     }
   }
 
