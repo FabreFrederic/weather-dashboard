@@ -7,14 +7,14 @@ import io.vertx.core.json.JsonObject;
 public class Temperature {
     private String id;
     private String date;
-    private long value;
+    private String value;
     private SensorEnvironment sensorEnvironment;
     public static final String DB_TABLE = Temperature.class.getName();
 
     public Temperature() {
     }
 
-    public Temperature(String id, String date, long value) {
+    public Temperature(String id, String date, String value) {
         this.id = id;
         this.date = date;
         this.value = value;
@@ -46,11 +46,11 @@ public class Temperature {
         this.date = date;
     }
 
-    public long getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(long value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

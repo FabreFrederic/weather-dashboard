@@ -23,6 +23,6 @@
 |[[date]]`date`|`String`|-
 |[[id]]`id`|`String`|-
 |[[sensorEnvironment]]`sensorEnvironment`|`link:enums.html#SensorEnvironment[SensorEnvironment]`|-
-|[[value]]`value`|`Number (long)`|-
+|[[value]]`value`|`String`|-
 |===
 

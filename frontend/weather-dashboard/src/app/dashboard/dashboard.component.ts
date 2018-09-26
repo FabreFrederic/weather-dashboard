@@ -22,6 +22,9 @@ export class DashboardComponent implements OnInit {
   @Input()
   public airTemperatureValue: number;
 
+  public currentValue: number = 99;
+  public currentDate: Date;
+
   constructor(private vertXEventBusService: VertXEventBusService) {
     vertXEventBusService.initialize(this.waterTemperatureNewValueCallback, this.airTemperatureNewValueCallback);
   }
