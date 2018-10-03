@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import {VertXEventBusService} from "../vertx/vertXEventBus.service";
+import {Subscription} from "rxjs/index";
 
 interface TemperaturePoint {
   x: number;
@@ -16,12 +17,16 @@ export class ChartComponent implements OnInit {
   private temperaturePoints: TemperaturePoint[] = [];
   Highcharts: any;
   chartOptions: any;
+  readingSubscription: Subscription = null;
 
   constructor(private vertXEventBusService: VertXEventBusService) {
+  }
+
+  ngOnInit(): void {
     this.Highcharts = Highcharts;
     Highcharts.setOptions({
-      global : {
-        timezoneOffset : new Date().getTimezoneOffset()
+      global: {
+        timezoneOffset: new Date().getTimezoneOffset()
       }
     });
 
@@ -60,40 +65,13 @@ export class ChartComponent implements OnInit {
         data: this.temperaturePoints
       }]
     };
-  }
 
-  ngOnInit() {
-    this.vertXEventBusService.initialize(this.waterTemperatureNewValueCallback, this.airTemperatureNewValueCallback);
+    this.readingSubscription = this.vertXEventBusService.getWaterTemperatureVertxObservable()
+      .subscribe((reading) => {
+        console.log('reading : ' + JSON.stringify(+reading.temperature));
+        this.Highcharts.charts[0].series[0].addPoint([+new Date(),
+          +reading.temperature], true, false);
+      });
   }
-
-  /**
-   * Vert.X event bus new value callback
-   * @param {*} error Error message
-   * @param {*} message Response message
-   */
-  public waterTemperatureNewValueCallback = (error: any, message: any) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('message.body.value : ' + message.body.value);
-      this.Highcharts.charts[0].series[0].addPoint([+new Date(),
-        +message.body.value], true, false);
-    }
-  }
-
-  /**
-   * Vert.X event bus new value callback
-   * @param {*} error Error message
-   * @param {*} message Response message
-   */
-  public airTemperatureNewValueCallback = (error: any, message: any) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('message : ' + JSON.stringify(message));
-      //this.airTemperatureValue = message.body.value;
-    }
-  }
-
 
 }

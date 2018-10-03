@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {VertXEventBusService} from "../vertx/vertXEventBus.service";
+import {Subscription} from "rxjs/index";
 
 @Component({
   selector: 'app-dashboard',
@@ -22,42 +23,24 @@ export class DashboardComponent implements OnInit {
   @Input()
   public airTemperatureValue: number;
 
-  public currentValue: number = 99;
-  public currentDate: Date;
+  waterTemperatureReadingSubscription: Subscription = null;
+  airTemperatureReadingSubscription: Subscription = null;
 
-  constructor(private vertXEventBusService: VertXEventBusService) {
-    vertXEventBusService.initialize(this.waterTemperatureNewValueCallback, this.airTemperatureNewValueCallback);
+  constructor(private vertXEventBusService: VertXEventBusService) {}
+
+  ngOnInit(): void {
+    console.log('OnInit');
+
+    this.waterTemperatureReadingSubscription = this.vertXEventBusService.getWaterTemperatureVertxObservable()
+      .subscribe((reading) => {
+        console.log('reading : ' + JSON.stringify(reading));
+        this.waterTemperatureValue = reading.temperature;
+      });
+
+    this.airTemperatureReadingSubscription = this.vertXEventBusService.getAirTemperatureVertxObservable()
+      .subscribe((reading) => {
+        console.log('reading : ' + JSON.stringify(reading));
+        this.airTemperatureValue = reading.temperature;
+      });
   }
-
-  ngOnInit() {
-  }
-
-  /**
-   * Vert.X event bus new value callback
-   * @param {*} error Error message
-   * @param {*} message Response message
-   */
-  public waterTemperatureNewValueCallback = (error: any, message: any) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('message : ' + JSON.stringify(message));
-      this.waterTemperatureValue = message.body.value;
-    }
-  }
-
-  /**
-   * Vert.X event bus new value callback
-   * @param {*} error Error message
-   * @param {*} message Response message
-   */
-  public airTemperatureNewValueCallback = (error: any, message: any) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('message : ' + JSON.stringify(message));
-      this.airTemperatureValue = message.body.value;
-    }
-  }
-
 }
