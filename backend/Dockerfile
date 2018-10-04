@@ -1,5 +1,7 @@
 FROM openjdk:8-jre-alpine
 
+LABEL maintainer="frederic@fabre.io"
+
 ENV VERTICLE_FILE weather-dashboard.jar
 
 # Set the location of the verticles
