@@ -1,3 +1,5 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/FabreFrederic/weather-dashboard.svg?columns=all)](https://waffle.io/FabreFrederic/weather-dashboard)
+
 ## Installation
 
 Build and run containers with docker-compose 
