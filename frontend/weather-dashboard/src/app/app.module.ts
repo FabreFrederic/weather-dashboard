@@ -11,7 +11,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {SensorDataCardComponent} from './sensor-data-card/sensor-data-card.component';
 import {VertXEventBusService} from './vertx/vertXEventBus.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {HighchartsChartModule} from 'highcharts-angular';
+import {ChartModule} from 'angular-highcharts';
 import {ChartComponent} from './chart/chart.component';
 
 @NgModule({
@@ -33,7 +33,7 @@ import {ChartComponent} from './chart/chart.component';
     MatListModule,
     MatCardModule,
     MatSelectModule,
-    HighchartsChartModule
+    ChartModule
   ],
   providers: [
     VertXEventBusService

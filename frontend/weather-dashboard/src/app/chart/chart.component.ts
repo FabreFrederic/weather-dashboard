@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import * as Highcharts from 'highcharts';
+import {Chart} from 'angular-highcharts';
 import {VertXEventBusService} from "../vertx/vertXEventBus.service";
 import {Subscription} from "rxjs/index";
+import * as Highcharts from 'highcharts';
 
 interface TemperaturePoint {
   x: number;
@@ -15,7 +16,7 @@ interface TemperaturePoint {
 })
 export class ChartComponent implements OnInit {
   private temperaturePoints: TemperaturePoint[] = [];
-  Highcharts: any;
+  chart: Chart;
   chartOptions: any;
   readingSubscription: Subscription = null;
 
@@ -23,14 +24,10 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.Highcharts = Highcharts;
-    Highcharts.setOptions({
+    this.chartOptions = {
       global: {
         timezoneOffset: new Date().getTimezoneOffset()
-      }
-    });
-
-    this.chartOptions = {
+      },
       title: {
         text: null
       },
@@ -66,10 +63,18 @@ export class ChartComponent implements OnInit {
       }]
     };
 
+    Highcharts.setOptions({
+      global: {
+        timezoneOffset: new Date().getTimezoneOffset()
+      }
+    });
+
+    this.chart = new Chart(this.chartOptions);
+
     this.readingSubscription = this.vertXEventBusService.getWaterTemperatureVertxObservable()
       .subscribe((reading) => {
         console.log('reading : ' + JSON.stringify(+reading.temperature));
-        this.Highcharts.charts[0].series[0].addPoint([+new Date(),
+        this.chart.ref.series[0].addPoint([+new Date(),
           +reading.temperature], true, false);
       });
   }

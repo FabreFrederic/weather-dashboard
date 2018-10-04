@@ -1,5 +1,7 @@
 FROM mongo
 
+LABEL maintainer="frederic@fabre.io"
+
 ARG mongodb_username
 ARG mongodb_password
 ARG mongodb_database
