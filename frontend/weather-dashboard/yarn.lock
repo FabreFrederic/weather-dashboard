@@ -163,11 +163,13 @@
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-6.0.3.tgz#7182f3824520fd5f5f6173fdee80284356d29d08"
 
-"@angular/material@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-6.2.0.tgz#63cd30dc84cf9610c8fb4c16027836bfcf9fc520"
+"@angular/material@6.4.7":
+  version "6.4.7"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-6.4.7.tgz#3c8f2d6a6a7904d97be29e06a84ffb62a8da6c16"
   dependencies:
     tslib "^1.7.1"
+  optionalDependencies:
+    parse5 "^5.0.0"
 
 "@angular/platform-browser-dynamic@6.0.3":
   version "6.0.3"
@@ -213,6 +215,16 @@
     rxjs "^6.0.0"
     semver "^5.3.0"
     semver-intersect "^1.1.2"
+
+"@types/geojson@*":
+  version "7946.0.4"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.4.tgz#4e049756383c3f055dd8f3d24e63fb543e98eb07"
+
+"@types/highcharts@^5.0.31":
+  version "5.0.31"
+  resolved "https://registry.yarnpkg.com/@types/highcharts/-/highcharts-5.0.31.tgz#ca9cc382d4af5a4c7a55f55e929cde3cc772b8a5"
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/jasmine@*", "@types/jasmine@~2.8.3":
   version "2.8.8"
@@ -466,6 +478,10 @@ amqplib@^0.5.2:
     buffer-more-ints "0.0.2"
     readable-stream "1.x >=1.1.9"
     safe-buffer "^5.0.1"
+
+angular-highcharts@6.2.3:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/angular-highcharts/-/angular-highcharts-6.2.3.tgz#243320ed05e33e1681ec4d07c7fefc38cf13d014"
 
 ansi-html@0.0.7:
   version "0.0.7"
@@ -2839,6 +2855,10 @@ he@1.1.x:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
+highcharts@6.1.0:
+  version "6.1.0"
+  resolved "http://registry.npmjs.org/highcharts/-/highcharts-6.1.0.tgz#115a6ee10ad36a53d9913f1030c6d46da16c7cb5"
+
 hipchat-notifier@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/hipchat-notifier/-/hipchat-notifier-1.1.0.tgz#b6d249755437c191082367799d3ba9a0f23b231e"
@@ -4675,6 +4695,10 @@ parse-passwd@^1.0.0:
 parse5@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
+
+parse5@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.0.tgz#c59341c9723f414c452975564c7c00a68d58acd2"
 
 parseqs@0.0.5:
   version "0.0.5"

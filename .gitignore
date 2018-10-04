@@ -1,5 +1,8 @@
 target
 intellij
+.idea
+*.iml
+
 .vertx
 vertx-start-process.id
 

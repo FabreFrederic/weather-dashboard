@@ -10,7 +10,7 @@ let airHumidity;
 
 const waterTemperatureAddress = 'water.temperature.address';
 const airTemperatureAddress = 'air.temperature.address';
-const eventBus = new EventBus('http:localhost:8080/eventbus');
+const eventBus = new EventBus('http://localhost:8080/eventbus');
 
 eventBus.onclose = (param) => {
     console.log('closed event bus', param)
@@ -27,12 +27,12 @@ eventBus.onopen = () => {
 
             switch (sensorType) {
                 case '*wt*':
-                    waterTemperature = dataSensor.substring(4, dataSensor.length - 1);
+                    waterTemperature = dataSensor.substring(4, dataSensor.length);
                     sendValueToEventBus(waterTemperature, waterTemperatureAddress);
                     break;
                 case '*at*':
-                    airTemperature = dataSensor.substring(4, dataSensor.length - 1);
-                    sendValueToEventBus(waterTemperature, airTemperature);
+                    airTemperature = dataSensor.substring(4, dataSensor.length);
+                    sendValueToEventBus(airTemperature, airTemperatureAddress);
                     break;
                 case '*ap*':
                     break;
@@ -47,13 +47,13 @@ eventBus.onopen = () => {
 
 function sendValueToEventBus(value, address) {
     eventBus.publish(address, '{"value":' + value + '}');
-    console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
+    // console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
 }
 
 serialport.on('close', function (err) {
     console.log('serial port closed', err);
 });
 
-serialPort.on('open', function () {
+serialport.on('open', function () {
     console.log('serial port open');
-}
+});

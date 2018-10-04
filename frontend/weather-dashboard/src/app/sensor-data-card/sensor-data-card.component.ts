@@ -1,12 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {VertXEventBusService} from "../vertx/vertXEventBus.service";
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-sensor-data-card',
   templateUrl: './sensor-data-card.component.html',
   styleUrls: ['./sensor-data-card.component.css']
 })
-export class SensorDataCardComponent implements OnInit {
+export class SensorDataCardComponent {
 
   @Input()
   public title: string;
@@ -15,25 +14,6 @@ export class SensorDataCardComponent implements OnInit {
   @Input()
   public value: number;
 
-  constructor(private vertXEventBusService: VertXEventBusService) {
-    vertXEventBusService.initialize(this.newValueCallback);
-  }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
-  /**
-   * Vert.X event bus new value callback
-   * @param {*} error Error message
-   * @param {*} message Response message
-   */
-  public newValueCallback = (error: any, message: any) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('message : ' + message);
-      this.value = message.body.value;
-    }
-  }
-
-}
+ }

@@ -71,7 +71,9 @@ import 'zone.js/dist/zone'; // Included with Angular CLI.
  */
 // (window as any).__Zone_enable_cross_context_check = true;
 
-
+// vertx client workaround to avoid error :
+// Uncaught ReferenceError: global is not defined
+(window as any).global = window;
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

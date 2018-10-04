@@ -1,0 +1,15 @@
+<div class="card-container">
+  <app-sensor-data-card
+    [title]="waterTemperatureTitle"
+    [subtitle]="waterTemperatureSubtitle"
+    [value]="waterTemperatureValue">
+  </app-sensor-data-card>
+
+  <app-sensor-data-card
+    [title]="airTemperatureTitle"
+    [subtitle]="airTemperatureSubtitle"
+    [value]="airTemperatureValue">
+  </app-sensor-data-card>
+</div>
+
+<app-chart></app-chart>

@@ -12,7 +12,7 @@ services:
                 - mongodb_password=${MONGODB_PASSWORD}
                 - mongodb_database=${MONGODB_DATABASE}
         image: weather-dashboard-mongodb
-        container_name: weather-dashboard-mongodb
+        container_name: weather-dashboard-app-mongodb
         volumes:
             - /opt/mongodb/data/db:/data/db:rw
             - ./mongodb/init/mongo.conf:/etc/mongo.conf
@@ -21,14 +21,14 @@ services:
             - 28017:28017
         networks:
             - weather-dashboard-network
-    app:
+    backend:
          env_file:
              - .env
          build:
             context: ../backend
             dockerfile: Dockerfile
-         image: weather-dashboard
-         container_name: weather-dashboard-app
+         image: weather-dashboard-backend
+         container_name: weather-dashboard-app-backend
          depends_on:
             - mongodb
          environment:
@@ -39,5 +39,17 @@ services:
             - 8080:8080
          networks:
             - weather-dashboard-network
+    frontend:
+      build:
+        context: ../frontend
+        dockerfile: Dockerfile
+      image: weather-dashboard-frontend
+      container_name: weather-dashboard-app-frontend
+      depends_on:
+      - backend
+      ports:
+      - 3000:80
+      networks:
+      - weather-dashboard-network
 networks:
   weather-dashboard-network:
