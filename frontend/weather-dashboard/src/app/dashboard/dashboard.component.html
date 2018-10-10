@@ -12,4 +12,11 @@
   </app-sensor-data-card>
 </div>
 
-<app-chart></app-chart>
+<app-chart
+  [lastValue]="waterTemperatureValue"
+  [lastDate]="waterTemperatureDate">
+</app-chart>
+<app-chart
+  [lastValue]="airTemperatureValue"
+  [lastDate]="airTemperatureDate">
+</app-chart>

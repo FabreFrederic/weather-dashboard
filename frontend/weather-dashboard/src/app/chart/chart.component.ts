@@ -1,10 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {Chart} from 'angular-highcharts';
-import {VertXEventBusService} from "../vertx/vertXEventBus.service";
-import {Subscription} from "rxjs/index";
 import * as Highcharts from 'highcharts';
 
-interface TemperaturePoint {
+interface Point {
   x: number;
   y: number;
 }
@@ -14,13 +12,17 @@ interface TemperaturePoint {
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
-  private temperaturePoints: TemperaturePoint[] = [];
+export class ChartComponent implements OnInit, OnChanges {
+  @Input()
+  public lastValue: number;
+  @Input()
+  public lastDate: number;
+
+  private points: Point[] = [];
   chart: Chart;
   chartOptions: any;
-  readingSubscription: Subscription = null;
 
-  constructor(private vertXEventBusService: VertXEventBusService) {
+  constructor() {
   }
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class ChartComponent implements OnInit {
           ]
         },
         color: '#BBE2DE',
-        data: this.temperaturePoints
+        data: this.points
       }]
     };
 
@@ -70,13 +72,16 @@ export class ChartComponent implements OnInit {
     });
 
     this.chart = new Chart(this.chartOptions);
+  }
 
-    this.readingSubscription = this.vertXEventBusService.getWaterTemperatureVertxObservable()
-      .subscribe((reading) => {
-        console.log('reading : ' + JSON.stringify(+reading.temperature));
-        this.chart.ref.series[0].addPoint([+new Date(),
-          +reading.temperature], true, false);
-      });
+  ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
+    if (changes['lastDate'] && this.lastDate) {
+      // console.log("new reading to display in chart");
+      if (this.chart) {
+        this.chart.ref.series[0].addPoint([+new Date(this.lastDate),
+          +this.lastValue], true, false);
+      }
+    }
   }
 
 }
