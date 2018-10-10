@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {TemperatureComponent} from './temperature/temperature.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
@@ -17,7 +16,6 @@ import {ChartComponent} from './chart/chart.component';
 @NgModule({
   declarations: [
     AppComponent,
-    TemperatureComponent,
     SensorDataCardComponent,
     DashboardComponent,
     ChartComponent
@@ -40,4 +38,5 @@ import {ChartComponent} from './chart/chart.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
