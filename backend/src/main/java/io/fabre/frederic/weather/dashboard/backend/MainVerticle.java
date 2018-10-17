@@ -13,6 +13,7 @@ public class MainVerticle extends AbstractVerticle {
         LOGGER.info("Main verticle is starting");
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(PingVerticle.class.getName());
+//        vertx.deployVerticle(SockJSVerticle.class.getName());
         vertx.deployVerticle(MongoVerticle.class.getName());
         vertx.deployVerticle(ServerVerticle.class.getName());
         vertx.deployVerticle(WaterTemperatureVerticle.class.getName());

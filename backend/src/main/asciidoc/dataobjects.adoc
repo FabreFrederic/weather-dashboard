@@ -1,5 +1,17 @@
 = Cheatsheets
 
+[[Sensor]]
+== Sensor
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|===
+
 [[Temperature]]
 == Temperature
 
