@@ -24,15 +24,16 @@ eventBus.onopen = () => {
         if (data && data.length > 4) {
             dataSensor = data.trim();
             sensorType = dataSensor.substring(0, 4);
+            let today = new Date().toISOString();
 
             switch (sensorType) {
                 case '*wt*':
                     waterTemperature = dataSensor.substring(4, dataSensor.length);
-                    sendValueToEventBus(waterTemperature, waterTemperatureAddress);
+                    sendValueToEventBus(waterTemperature, today, waterTemperatureAddress);
                     break;
                 case '*at*':
                     airTemperature = dataSensor.substring(4, dataSensor.length);
-                    sendValueToEventBus(airTemperature, airTemperatureAddress);
+                    sendValueToEventBus(airTemperature, today, airTemperatureAddress);
                     break;
                 case '*ap*':
                     break;
@@ -45,8 +46,8 @@ eventBus.onopen = () => {
     });
 }
 
-function sendValueToEventBus(value, address) {
-    eventBus.publish(address, '{"value":' + value + '}');
+function sendValueToEventBus(value, date, address) {
+    eventBus.publish(address, '{"value":' + value + ', "date":"' + date + '"}');
     // console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
 }
 

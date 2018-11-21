@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   @Input()
   public waterTemperatureValue: number;
   @Input()
-  public waterTemperatureDate: number;
+  public waterTemperatureDate: string;
 
   @Input()
   public airTemperatureTitle: string = 'Temperature';
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   @Input()
   public airTemperatureValue: number;
   @Input()
-  public airTemperatureDate: number;
+  public airTemperatureDate: string;
 
   constructor(private vertXEventBusService: VertXEventBusService) {
   }
@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
         console.log('reading : ' + JSON.stringify(reading));
         this.waterTemperatureValue = reading.temperature;
         // this.waterTemperatureDate = +reading.date;
-        this.waterTemperatureDate = +new Date();
+        this.waterTemperatureDate = reading.date;
       });
 
     this.vertXEventBusService.getAirTemperatureVertxObservable()
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
         console.log('reading : ' + JSON.stringify(reading));
         this.airTemperatureValue = reading.temperature;
         // this.airTemperatureDate = +reading.date;
-        this.airTemperatureDate = +new Date();
+        this.airTemperatureDate = reading.date;
       });
   }
 }
