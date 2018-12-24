@@ -39,20 +39,19 @@ public class AirTemperatureRestVerticle extends AbstractVerticle {
 
         repository.save(temperature, res -> {
             Temperature temperatureResult = res.result();
-            LOGGER.info("Saved : {}", temperatureResult.toString());
+            LOGGER.info("Saved : {}", temperatureResult);
             routingContext.next();
         });
     }
 
     private void sendDataToEventBusHandler(final RoutingContext routingContext) {
         Temperature temperature = Json.decodeValue(routingContext.getBodyAsString(), Temperature.class);
-        LOGGER.info("New temperature send to eventbus : {}", temperature.toString());
+        LOGGER.info("New temperature send to eventbus : {}", temperature);
 
         vertx.eventBus().send(AIR_TEMPERATURE_ADRESS, temperature, reply ->  {
-            LOGGER.info("New temperature consumed from eventbus : {}", temperature.toString());
+            LOGGER.info("New temperature consumed from eventbus : {}", temperature);
             routingContext.response().end(temperature.toString());
         });
-
     }
 
 }
