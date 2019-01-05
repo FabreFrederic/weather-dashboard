@@ -19,10 +19,9 @@ eventBus.onclose = (param) => {
 eventBus.onopen = () => {
     console.log('open event bus');
     serialport.on('data', function (data) {
-
         // Identify the type of sensor
         if (data && data.length > 4) {
-            dataSensor = data.trim();
+            dataSensor = String(data).trim();
             sensorType = dataSensor.substring(0, 4);
             let today = new Date().toISOString();
 
