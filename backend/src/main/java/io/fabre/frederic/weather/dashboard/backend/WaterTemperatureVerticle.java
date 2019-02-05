@@ -1,6 +1,6 @@
 package io.fabre.frederic.weather.dashboard.backend;
 
-public class WaterTemperatureVerticle extends AbstractTemperatureVerticle {
+public class WaterTemperatureVerticle extends AbstractSaveReadingMongodbVerticle {
 
     private static final String WATER_TEMPERATURE_ADDRESS = "water.temperature.address";
     private static final String WATER_TEMPERATURE_FRONTEND_ADDRESS = "water.temperature.frontend.address";

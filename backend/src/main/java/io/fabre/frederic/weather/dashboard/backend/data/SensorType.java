@@ -1,12 +1,12 @@
 package io.fabre.frederic.weather.dashboard.backend.data;
 
-public enum SensorEnvironment {
-    WATER("water"),
-    AIR("air");
+public enum SensorType {
+    TEMPERATURE("temperature"),
+    PRESSURE("pressure");
 
     private final String value;
 
-    SensorEnvironment(final String value) {
+    SensorType(final String value) {
         this.value = value;
     }
 

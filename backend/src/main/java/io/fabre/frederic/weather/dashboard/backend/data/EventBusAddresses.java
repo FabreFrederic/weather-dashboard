@@ -1,17 +1,15 @@
 package io.fabre.frederic.weather.dashboard.backend.data;
 
-public enum SensorEnvironment {
-    WATER("water"),
-    AIR("air");
+public enum EventBusAddresses {
+    ADDRESSES(".address");
 
     private final String value;
 
-    SensorEnvironment(final String value) {
+    EventBusAddresses(final String value) {
         this.value = value;
     }
 
     public String getValue() {
         return value;
     }
-
 }

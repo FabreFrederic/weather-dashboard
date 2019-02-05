@@ -5,34 +5,37 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
 import io.vertx.reactivex.ext.mongo.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TemperatureRepositoryImpl implements TemperatureRepository {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TemperatureRepositoryImpl.class);
-
-    MongoClient mongoClient;
+    private MongoClient mongoClient;
+    private static final String mongoDbDateFieldName = "date";
 
     public TemperatureRepositoryImpl(final MongoClient client) {
         this.mongoClient = client;
     }
 
     @Override
-    public TemperatureRepository save(Temperature temperature, Handler<AsyncResult<Temperature>> resultHandler) {
-        JsonObject json = JsonObject.mapFrom(temperature);
-        mongoClient.save(Temperature.DB_TABLE, json, res -> {
+    public TemperatureRepository save(Reading reading, Handler<AsyncResult<Reading>> resultHandler) {
+        JsonObject json = JsonObject.mapFrom(reading);
+
+        mongoClient.save(Reading.COLLECTION, json, res -> {
             if (res.succeeded()) {
-                LOGGER.info("Temperature created: {}", res.result());
-                temperature.setId(res.result());
-                resultHandler.handle(Future.succeededFuture(temperature));
+                LOGGER.info("Reading created: {}", res.result());
+                reading.setId(res.result());
+                resultHandler.handle(Future.succeededFuture(reading));
             } else {
-                LOGGER.error("Temperature not created", res.cause());
+                LOGGER.error("Reading not created", res.cause());
                 resultHandler.handle(Future.failedFuture(res.cause()));
             }
         });
@@ -40,39 +43,39 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public TemperatureRepository findTodayTemperature(Handler<AsyncResult<List<Temperature>>> resultHandler) {
-        String date = "2018-12-02T00:00:00+00:00";
-        JsonObject query = new JsonObject().put("date", new JsonObject().put("$lte", date));
+    public TemperatureRepository findTodayReadings(final SensorEnvironment sensorEnvironment,
+                                                   final SensorType sensorType,
+                                                   final Handler<AsyncResult<List<Reading>>> resultHandler) {
+        final String date = getAtMidNightTodayDate();
+        JsonObject query = new JsonObject().put(mongoDbDateFieldName, new JsonObject().put("$gte", date));
+        query.put("sensorEnvironment", new JsonObject().put("$eq", sensorEnvironment));
+        query.put("sensorType", new JsonObject().put("$eq", sensorType));
 
-        FindOptions options = new FindOptions().setBatchSize(10);
+        final List<Reading> readings = new ArrayList<>();
 
-        final List<Temperature> temperatures = new ArrayList<>();
-
-        mongoClient.rxFindWithOptions(Temperature.DB_TABLE, query, options)
+        mongoClient.rxFind(Reading.COLLECTION, query)
                 .map(JsonArray::new)
                 .subscribe(rows -> {
                             for (Object json : rows.getList()) {
                                 LOGGER.debug(((JsonObject) json).encodePrettily());
-                                temperatures.add(new Temperature((JsonObject) json));
+                                readings.add(new Reading((JsonObject) json));
                             }
-                            resultHandler.handle(Future.succeededFuture(temperatures));
+                            resultHandler.handle(Future.succeededFuture(readings));
                         },
                         err -> {
-                            LOGGER.error("Error while retrieving today's temperature", err);
+                            LOGGER.error("Error while retrieving today's air temperature", err);
                             resultHandler.handle(Future.failedFuture(err.getMessage()));
                         });
+
         return this;
     }
 
-    public void findTodayTemperature2(Handler<AsyncResult<List<Temperature>>> resultHandler) {
-        JsonObject query = new JsonObject()
-                .put("author", "J. R. R. Tolkien");
-        FindOptions options = new FindOptions().setBatchSize(10);
-        mongoClient.findBatchWithOptions("book", query, options)
-                .exceptionHandler(throwable -> throwable.printStackTrace())
-                .endHandler(v -> System.out.println("End of research"))
-                .handler(doc -> System.out.println("Found doc: " + doc.encodePrettily()));
-
+    private String getAtMidNightTodayDate() {
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        return formatter.format(todayMidnight);
     }
 }
 

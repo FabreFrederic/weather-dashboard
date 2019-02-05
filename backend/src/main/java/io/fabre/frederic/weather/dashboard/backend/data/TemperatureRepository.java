@@ -13,16 +13,18 @@ import java.util.List;
 public interface TemperatureRepository {
 
     @Fluent
-    TemperatureRepository save(Temperature temperature, Handler<AsyncResult<Temperature>> resultHandler);
+    TemperatureRepository save(final Reading reading, final Handler<AsyncResult<Reading>> resultHandler);
 
     @Fluent
-    TemperatureRepository findTodayTemperature(Handler<AsyncResult<List<Temperature>>> resultHandler);
+    TemperatureRepository findTodayReadings(final SensorEnvironment sensorEnvironment,
+                                            final SensorType sensorType,
+                                            final Handler<AsyncResult<List<Reading>>> resultHandler);
 
-    static TemperatureRepository createProxy(Vertx vertx, String address) {
+    static TemperatureRepository createProxy(final Vertx vertx, final String address) {
         return new TemperatureRepositoryVertxEBProxy(vertx, address);
     }
 
-    static TemperatureRepository create(MongoClient client) {
+    static TemperatureRepository create(final MongoClient client) {
         return new TemperatureRepositoryImpl(client);
     }
 }

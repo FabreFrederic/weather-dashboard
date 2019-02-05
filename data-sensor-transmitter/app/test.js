@@ -10,8 +10,16 @@ eventBus.onopen = () => {
     let airValue = Math.floor(Math.random() * 6) + 1;
     let today = new Date().toISOString();
 
-    eventBus.publish(waterTemperatureAddress, '{"date":"' + today + '" ,"value":' + waterValue + ' ,"sensorEnvironment":"WATER"}');
-    eventBus.publish(airTemperatureAddress, '{"date":"' + today + '" ,"value":' + airValue + ' ,"sensorEnvironment":"AIR"}');
+    eventBus.publish(waterTemperatureAddress, '{"date":"' + today +
+        '" ,"value":' + waterValue +
+        ' ,"sensorEnvironment":"WATER"' +
+        ' ,"sensorType":"TEMPERATURE"}');
+
+    eventBus.publish(airTemperatureAddress, '{"date":"' + today +
+        '" ,"value":' + airValue +
+        ' ,"sensorEnvironment":"AIR"' +
+        ' ,"sensorType":"TEMPERATURE"}');
+
     console.log('waterValue : ' + waterValue);
     console.log('airValue : ' + airValue);
 }

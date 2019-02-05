@@ -13,10 +13,13 @@
 </div>
 
 <app-chart
-  [lastValue]="waterTemperatureValue"
-  [lastDate]="waterTemperatureDate">
+  [lastValue]="airTemperatureValue"
+  [lastDate]="airTemperatureDate"
+  [url]="todayAirTemperatureUrl">
 </app-chart>
 <app-chart
-  [lastValue]="airTemperatureValue"
-  [lastDate]="airTemperatureDate">
+  [lastValue]="waterTemperatureValue"
+  [lastDate]="waterTemperatureDate"
+  [url]="todayWaterTemperatureUrl">
 </app-chart>
+

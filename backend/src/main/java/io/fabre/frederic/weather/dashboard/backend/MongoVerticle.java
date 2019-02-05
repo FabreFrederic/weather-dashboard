@@ -2,7 +2,6 @@ package io.fabre.frederic.weather.dashboard.backend;
 
 import io.fabre.frederic.weather.dashboard.backend.data.TemperatureRepository;
 import io.fabre.frederic.weather.dashboard.backend.data.TemperatureRepositoryImpl;
-import io.fabre.frederic.weather.dashboard.backend.proxy.MyService;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.json.JsonObject;
@@ -17,10 +16,9 @@ import org.slf4j.LoggerFactory;
 public class MongoVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoVerticle.class);
     private static final String MONGO_SERVICE = "mongo.service";
-    public static MyService myservice;
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         LOGGER.info("This verticle is starting");
         ConfigStoreOptions file = new ConfigStoreOptions().setType("file").
                 setConfig(new JsonObject().put("path", "application.json"));
@@ -31,7 +29,7 @@ public class MongoVerticle extends AbstractVerticle {
             String host = System.getenv("MONGODB_HOST");
             LOGGER.info("host : {}", host);
             if (StringUtils.isBlank(host)) {
-                host =  datasourceConfig.getString("host");
+                host = datasourceConfig.getString("host");
             }
 
             config.put("host", host);
@@ -40,20 +38,11 @@ public class MongoVerticle extends AbstractVerticle {
 
             final MongoClient mongoClient = MongoClient.createShared(vertx, config);
 
-            myservice = MyService.create(mongoClient, ready -> {
-
-            });
-
             new ServiceBinder(vertx.getDelegate())
                     .setAddress(MONGO_SERVICE)
                     .register(TemperatureRepository.class, new TemperatureRepositoryImpl(mongoClient));
 
         });
-    }
-
-    @Override
-    public void stop() throws Exception {
-        myservice.close();
     }
 
 }
