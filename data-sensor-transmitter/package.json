@@ -12,6 +12,7 @@
     "mongoose": "^4.11.5",
     "morgan": "^1.8.1",
     "node-schedule": "^1.2.1",
+    "npm": "^6.9.0",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
     "serialport": "7.0.2",
