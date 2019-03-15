@@ -17,15 +17,31 @@ export class ChartComponent implements OnInit, OnChanges {
   public lastValue: number;
   @Input()
   public lastDate: number;
+  @Input()
+  public points: Point[] = [];
 
-  private points: Point[] = [];
   chart: Chart;
   chartOptions: any;
 
   constructor() {
+    this.setOptions();
+    this.chart = new Chart(this.chartOptions);
+    Highcharts.setOptions({
+      global: {
+        timezoneOffset: new Date().getTimezoneOffset()
+      }
+    });
   }
 
   ngOnInit(): void {
+    // TODO : call the service to retrieve the today value
+    this.points.push({
+      x: +new Date(),
+      y: 1
+    });
+  }
+
+  private setOptions() {
     this.chartOptions = {
       global: {
         timezoneOffset: new Date().getTimezoneOffset()
@@ -64,14 +80,6 @@ export class ChartComponent implements OnInit, OnChanges {
         data: this.points
       }]
     };
-
-    Highcharts.setOptions({
-      global: {
-        timezoneOffset: new Date().getTimezoneOffset()
-      }
-    });
-
-    this.chart = new Chart(this.chartOptions);
   }
 
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
