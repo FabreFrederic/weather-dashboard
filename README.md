@@ -33,6 +33,10 @@ mvn compile vertx:run
 
 ## MongoDB commands
 
+Open the the mongo shell
+```bash
+mongo
+```
 ```bash
 > show dbs
 admin              0.000GB
