@@ -12,6 +12,7 @@ import {VertXEventBusService} from './vertx/vertXEventBus.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {ChartModule} from 'angular-highcharts';
 import {ChartComponent} from './chart/chart.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {ChartComponent} from './chart/chart.component';
     MatListModule,
     MatCardModule,
     MatSelectModule,
-    ChartModule
+    ChartModule,
+    HttpClientModule
   ],
   providers: [
     VertXEventBusService

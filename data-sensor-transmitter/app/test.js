@@ -8,8 +8,18 @@ eventBus.onopen = () => {
     console.log('open event bus');
     let waterValue = Math.floor(Math.random() * 6) + 1;
     let airValue = Math.floor(Math.random() * 6) + 1;
-    eventBus.publish(waterTemperatureAddress, '{"value":' + waterValue + ',"sensorEnvironment":"WATER"}');
-    eventBus.publish(airTemperatureAddress, '{"value":' + airValue + ',"sensorEnvironment":"AIR"}');
+    let today = new Date().toISOString();
+
+    eventBus.publish(waterTemperatureAddress, '{"date":"' + today +
+        '" ,"value":' + waterValue +
+        ' ,"sensorEnvironment":"WATER"' +
+        ' ,"sensorType":"TEMPERATURE"}');
+
+    eventBus.publish(airTemperatureAddress, '{"date":"' + today +
+        '" ,"value":' + airValue +
+        ' ,"sensorEnvironment":"AIR"' +
+        ' ,"sensorType":"TEMPERATURE"}');
+
     console.log('waterValue : ' + waterValue);
     console.log('airValue : ' + airValue);
 }

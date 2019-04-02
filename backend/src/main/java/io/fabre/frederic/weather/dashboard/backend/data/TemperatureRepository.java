@@ -5,19 +5,26 @@ import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.ext.mongo.MongoClient;
+import io.vertx.reactivex.ext.mongo.MongoClient;
+
+import java.util.List;
 
 @ProxyGen
 public interface TemperatureRepository {
 
     @Fluent
-    TemperatureRepository save(Temperature temperature, Handler<AsyncResult<Temperature>> resultHandler);
+    TemperatureRepository save(final Reading reading, final Handler<AsyncResult<Reading>> resultHandler);
 
-    static TemperatureRepository createProxy(Vertx vertx, String address) {
+    @Fluent
+    TemperatureRepository findTodayReadings(final SensorEnvironment sensorEnvironment,
+                                            final SensorType sensorType,
+                                            final Handler<AsyncResult<List<Reading>>> resultHandler);
+
+    static TemperatureRepository createProxy(final Vertx vertx, final String address) {
         return new TemperatureRepositoryVertxEBProxy(vertx, address);
     }
 
-    static TemperatureRepository create(MongoClient client) {
+    static TemperatureRepository create(final MongoClient client) {
         return new TemperatureRepositoryImpl(client);
     }
 }

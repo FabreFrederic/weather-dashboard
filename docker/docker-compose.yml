@@ -29,8 +29,6 @@ services:
             dockerfile: Dockerfile
          image: weather-dashboard-backend
          container_name: weather-dashboard-app-backend
-         depends_on:
-            - mongodb
          environment:
             - MONGODB_HOST=${MONGODB_HOST}
          ports:
@@ -45,8 +43,6 @@ services:
         dockerfile: Dockerfile
       image: weather-dashboard-frontend
       container_name: weather-dashboard-app-frontend
-      depends_on:
-      - backend
       ports:
       - 3000:80
       networks:

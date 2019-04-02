@@ -5,24 +5,33 @@
 // Bus One Wire Bus on the arduino pin 2
 OneWire oneWire(2); 
 DallasTemperature sensors(&oneWire);
-DeviceAddress sensorDeviceAddress;
+
 const int debit = 9600;
+//int devicesFound = 0;
+int sensorResolution = 12;
+String value;
 
 void setup() {
  Serial.begin(debit);
- //Sensor activation
- sensors.begin(); 
- sensors.getAddress(sensorDeviceAddress, 0);
+ sensors.begin();
+
+// devicesFound = sensors.getDeviceCount();
+// Serial.print(F("Number of sensors : "));
+// Serial.println(devicesFound);
+
  // Resolutions: 9,10,11 or 12
- sensors.setResolution(sensorDeviceAddress, 12); 
+ sensors.setResolution(sensorResolution);
 }
 
 void loop() {
   sensors.requestTemperatures();
-  // Sensor number 0
-  Serial.print("*wt*");
-  Serial.println(sensors.getTempCByIndex(0));
-  Serial.println();
 
- delay(100);
+  value = sensors.getTempCByIndex(0);
+  Serial.println("*wt*" + value);
+
+  value = sensors.getTempCByIndex(1);
+  Serial.println("*at*" + value);
+
+  delay(2000);
 }
+
