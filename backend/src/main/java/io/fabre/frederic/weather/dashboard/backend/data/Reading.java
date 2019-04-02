@@ -4,29 +4,33 @@ import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 
 @DataObject(generateConverter = true)
-public class Temperature {
+public class Reading {
     private String id;
     private String date;
     private String value;
     private SensorEnvironment sensorEnvironment;
-    public static final String DB_TABLE = Temperature.class.getName();
+    private SensorType sensorType;
 
-    public Temperature() {
+    public static final String COLLECTION = "weather.dashboard.collection";
+
+    public Reading() {
     }
 
-    public Temperature(String id, String date, String value) {
+    public Reading(String id, String date, String value, SensorEnvironment sensorEnvironment, SensorType sensorType) {
         this.id = id;
         this.date = date;
         this.value = value;
+        this.sensorEnvironment = sensorEnvironment;
+        this.sensorType = sensorType;
     }
 
-    public Temperature(JsonObject json) {
-        TemperatureConverter.fromJson(json, this);
+    public Reading(JsonObject json) {
+        ReadingConverter.fromJson(json, this);
     }
 
-    public JsonObject toJson(){
+    public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        TemperatureConverter.toJson(this, json);
+        ReadingConverter.toJson(this, json);
         return json;
     }
 
@@ -62,17 +66,26 @@ public class Temperature {
         this.sensorEnvironment = sensorEnvironment;
     }
 
-    public static String getDbTable() {
-        return DB_TABLE;
+    public SensorType getSensorType() {
+        return sensorType;
+    }
+
+    public void setSensorType(SensorType sensorType) {
+        this.sensorType = sensorType;
+    }
+
+    public static String getCollection() {
+        return COLLECTION;
     }
 
     @Override
     public String toString() {
-        return "Temperature{" +
+        return "Reading{" +
                 "id='" + id + '\'' +
                 ", date='" + date + '\'' +
-                ", value=" + value +
+                ", value='" + value + '\'' +
                 ", sensorEnvironment=" + sensorEnvironment +
+                ", sensorType=" + sensorType +
                 '}';
     }
 }

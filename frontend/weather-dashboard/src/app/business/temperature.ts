@@ -2,11 +2,12 @@
  * a reading temperature
  */
 export class Temperature {
-  temperature: number;
-  date: string;
+  value: number;
+  date: number;
 
-  constructor(temperature: number, date: string) {
-    this.temperature = temperature;
+  constructor(value: number, date: number) {
+    this.value = value;
     this.date = date;
   }
+
 }
