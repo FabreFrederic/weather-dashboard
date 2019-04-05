@@ -1,11 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {VertXEventBusService} from "../vertx/vertXEventBus.service";
-import {Temperature} from "../business/temperature";
-
-interface Point {
-  x: number;
-  y: number;
-}
+import {ChartConfig} from "../chart/chartConfig";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,20 +8,8 @@ interface Point {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
   @Input()
-  public airTemperatureTitle: string = 'Temperature';
-  @Input()
-  public airTemperatureSubtitle: string = 'air';
-  @Input()
-  public airTemperatureValue: number;
-  @Input()
-  public airTemperatureDate: number;
-  @Input()
-  public todayAirTemperatureUrl: string = '/air/temperature/today';
-
-  @Input()
-  public waterTemperatureTitle: string = 'Temperature';
+  public waterTemperatureTitle: string = 'Temperature C°';
   @Input()
   public waterTemperatureSubtitle: string = 'eau';
   @Input()
@@ -34,23 +17,39 @@ export class DashboardComponent implements OnInit {
   @Input()
   public waterTemperatureDate: number;
   @Input()
-  public todayWaterTemperatureUrl: string = '/water/temperature/today';
+  public waterTemperatureConfig: ChartConfig = new ChartConfig();
+
+  @Input()
+  public airTemperatureTitle: string = 'Temperature C°';
+  @Input()
+  public airTemperatureSubtitle: string = 'air';
+  @Input()
+  public airTemperatureValue: number;
+  @Input()
+  public airTemperatureDate: number;
+  @Input()
+  public airTemperatureConfig: ChartConfig = new ChartConfig();
 
   constructor(private vertXEventBusService: VertXEventBusService) {
+    this.airTemperatureConfig.url = '/air/temperature/today';
+    this.airTemperatureConfig.xAxisType = 'datetime';
+    this.airTemperatureConfig.yAxisTitleText = 'temperature C°';
+    this.airTemperatureConfig.seriesName = "Temperature de l'air";
+
+    this.waterTemperatureConfig.url = '/water/temperature/today';
+    this.waterTemperatureConfig.xAxisType = 'datetime';
+    this.waterTemperatureConfig.yAxisTitleText = 'temperature C°';
+    this.waterTemperatureConfig.seriesName = "Temperature de l'eau";
   }
 
   ngOnInit(): void {
     this.vertXEventBusService.getAirTemperatureVertxObservable().subscribe((reading) => {
-      console.log('reading : ' + JSON.stringify(reading));
       this.airTemperatureValue = reading.value;
-      // this.airTemperatureDate = +reading.date;
       this.airTemperatureDate = reading.date;
     });
 
     this.vertXEventBusService.getWaterTemperatureVertxObservable().subscribe((reading) => {
-      console.log('reading : ' + JSON.stringify(reading));
       this.waterTemperatureValue = reading.value;
-      // this.waterTemperatureDate = +reading.date;
       this.waterTemperatureDate = reading.date;
     });
 
