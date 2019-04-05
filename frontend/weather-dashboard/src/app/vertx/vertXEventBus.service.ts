@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Subject} from "rxjs/index";
-import {Temperature} from "../business/temperature";
+import {Reading} from "../business/reading";
 
 import * as EventBus from 'vertx3-eventbus-client';
 
@@ -14,8 +14,8 @@ export const VERTX_EVENTBUS_CONFIG = {
 export class VertXEventBusService implements OnDestroy {
 
   private eventBus;
-  private waterTemperatureVertxSubject = new Subject<Temperature>();
-  private airTemperatureVertxSubject = new Subject<Temperature>();
+  private waterTemperatureVertxSubject = new Subject<Reading>();
+  private airTemperatureVertxSubject = new Subject<Reading>();
 
   constructor() {
     console.log('VertXEventBusService constructor');
@@ -39,7 +39,7 @@ export class VertXEventBusService implements OnDestroy {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
-      let temperature: Temperature = new Temperature(message.body.value, message.body.date);
+      let temperature: Reading = new Reading(message.body.value, message.body.date);
       // Send the response to the observable
       this.waterTemperatureVertxSubject.next(temperature);
     } else {
@@ -51,7 +51,7 @@ export class VertXEventBusService implements OnDestroy {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
-      let temperature: Temperature = new Temperature(message.body.value, message.body.date);
+      let temperature: Reading = new Reading(message.body.value, message.body.date);
       // Send the response to the observable
       this.airTemperatureVertxSubject.next(temperature);
     } else {

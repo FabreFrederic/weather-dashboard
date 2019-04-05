@@ -1,7 +1,7 @@
 /**
- * a reading temperature
+ * a reading value
  */
-export class Temperature {
+export class Reading {
   value: number;
   date: number;
 
