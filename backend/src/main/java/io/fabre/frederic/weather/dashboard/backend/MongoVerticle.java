@@ -20,6 +20,7 @@ public class MongoVerticle extends AbstractVerticle {
     @Override
     public void start() {
         LOGGER.info("This verticle is starting");
+
         ConfigStoreOptions file = new ConfigStoreOptions().setType("file").
                 setConfig(new JsonObject().put("path", "application.json"));
         ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(file));
@@ -41,7 +42,6 @@ public class MongoVerticle extends AbstractVerticle {
             new ServiceBinder(vertx.getDelegate())
                     .setAddress(MONGO_SERVICE)
                     .register(TemperatureRepository.class, new TemperatureRepositoryImpl(mongoClient));
-
         });
     }
 

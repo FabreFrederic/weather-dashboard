@@ -1,8 +1,9 @@
 const EventBus = require('vertx3-eventbus-client');
 const cron = require("node-cron");
 
-const waterTemperatureAddress = 'water.temperature.address';
-const airTemperatureAddress = 'air.temperature.address';
+const airTemperatureAddress = 'air.temperature.raw.address';
+const waterTemperatureAddress = 'water.temperature.raw.address';
+const eventBusUrl = 'http://localhost:8080/eventbus';
 
 let options = {
     // Max reconnect attempts
@@ -17,27 +18,27 @@ let options = {
     vertxbus_randomization_factor: 0.5
 };
 
-const eventBus = new EventBus('http://localhost:8080/eventbus', options);
+const eventBus = new EventBus(eventBusUrl, options);
 eventBus.enableReconnect(true);
 
 eventBus.onopen = () => {
-    cron.schedule("*/1 * * * * *", function() {
-        let waterValue = Math.floor(Math.random() * 6) + 1 + '.' + Math.floor(Math.random() * 6) + 1;
+    cron.schedule("*/5 * * * * *", function() {
+        let waterValue = Math.floor(Math.random() * 9) + '.' + Math.floor(Math.random() * 9);
         let airValue = Math.floor(Math.random() * 6) + 1 + '.' + Math.floor(Math.random() * 6) + 1;
         let today = new Date().toISOString();
-
-        eventBus.publish(waterTemperatureAddress, '{"date":"' + today +
-            '" ,"value":' + waterValue +
-            ' ,"sensorEnvironment":"WATER"' +
-            ' ,"sensorType":"TEMPERATURE"}');
 
         eventBus.publish(airTemperatureAddress, '{"date":"' + today +
             '" ,"value":' + airValue +
             ' ,"sensorEnvironment":"AIR"' +
             ' ,"sensorType":"TEMPERATURE"}');
 
-        console.log('waterValue : ' + waterValue);
+        eventBus.publish(waterTemperatureAddress, '{"date":"' + today +
+            '" ,"value":' + waterValue +
+            ' ,"sensorEnvironment":"WATER"' +
+            ' ,"sensorType":"TEMPERATURE"}');
+
         console.log('airValue : ' + airValue);
+        console.log('waterValue : ' + waterValue);
     });
 
     console.log('open event bus');
@@ -45,5 +46,4 @@ eventBus.onopen = () => {
 
 eventBus.onclose = (param) => {
     console.log('closed event bus', param);
-
 };

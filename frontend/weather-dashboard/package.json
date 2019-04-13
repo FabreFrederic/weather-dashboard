@@ -29,12 +29,12 @@
     "highcharts": "7.0.3",
     "npm": "^6.9.0",
     "rxjs": "6.4.0",
-    "vertx3-eventbus-client": "^3.6.3",
+    "vertx3-eventbus-client": "3.7.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.5",
-    "@angular/cli": "6.0.7",
+    "@angular/cli": "7.3.9",
     "@angular/compiler-cli": "7.2.11",
     "@angular/language-service": "7.2.11",
     "@types/jasmine": "^2.8.16",

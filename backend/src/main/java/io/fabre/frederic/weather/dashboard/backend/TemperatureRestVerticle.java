@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class AirTemperatureRestVerticle extends AbstractVerticle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AirTemperatureRestVerticle.class);
+public class TemperatureRestVerticle extends AbstractVerticle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemperatureRestVerticle.class);
     private TemperatureRepository repository;
     private static final String TEMPERATURE_SERVICE = "mongo.service";
 
@@ -30,8 +30,20 @@ public class AirTemperatureRestVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(getCorsHandler());
         router.route().handler(BodyHandler.create());
-        router.get("/air/temperature/today").produces("application/json").handler(this::getTodayAirTemperatureHandler);
-        router.get("/water/temperature/today").produces("application/json").handler(this::getTodayWaterTemperatureHandler);
+        router.get("/air/temperatures/today").produces("application/json").
+                handler(this::getTodayAirTemperatureHandler);
+        router.get("/water/temperatures/today").produces("application/json").
+                handler(this::getTodayWaterTemperatureHandler);
+
+        router.get("/water/temperature/today/max").produces("application/json").
+                handler(this::getTodayMaxWaterTemperatureHandler);
+        router.get("/water/temperature/today/min").produces("application/json").
+                handler(this::getTodayMinWaterTemperatureHandler);
+
+        router.get("/air/temperature/today/max").produces("application/json").
+                handler(this::getTodayMaxAirTemperatureHandler);
+        router.get("/air/temperature/today/min").produces("application/json").
+                handler(this::getTodayMinAirTemperatureHandler);
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8085);
         repository = TemperatureRepository.createProxy(vertx, TEMPERATURE_SERVICE);
@@ -73,4 +85,39 @@ public class AirTemperatureRestVerticle extends AbstractVerticle {
         });
     }
 
+    private void getTodayMaxWaterTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMaxReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res -> {
+            HttpServerResponse response = routingContext.response();
+            response.putHeader("content-type", "application/json");
+            LOGGER.info(res.toString());
+            response.end(res.toString());
+        });
+    }
+
+    private void getTodayMinWaterTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMinReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res -> {
+            HttpServerResponse response = routingContext.response();
+            response.putHeader("content-type", "application/json");
+            LOGGER.info(res.toString());
+            response.end(res.toString());
+        });
+    }
+
+    private void getTodayMaxAirTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMaxReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res -> {
+            HttpServerResponse response = routingContext.response();
+            response.putHeader("content-type", "application/json");
+            LOGGER.info(res.toString());
+            response.end(res.toString());
+        });
+    }
+
+    private void getTodayMinAirTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMinReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res -> {
+            HttpServerResponse response = routingContext.response();
+            response.putHeader("content-type", "application/json");
+            LOGGER.info(res.toString());
+            response.end(res.toString());
+        });
+    }
 }

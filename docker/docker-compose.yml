@@ -1,51 +1,60 @@
 version: '3.3'
 
 services:
-    mongodb:
-        env_file:
-            - .env
-        build:
-            context: ./mongodb
-            dockerfile: Dockerfile
-            args:
-                - mongodb_username=${MONGODB_USERNAME}
-                - mongodb_password=${MONGODB_PASSWORD}
-                - mongodb_database=${MONGODB_DATABASE}
-        image: weather-dashboard-mongodb
-        container_name: weather-dashboard-app-mongodb
-        volumes:
-            - /opt/mongodb/data/db:/data/db:rw
-            - ./mongodb/init/mongo.conf:/etc/mongo.conf
-        ports:
-            - 27017:27017
-            - 28017:28017
-        networks:
-            - weather-dashboard-network
-    backend:
-         env_file:
-             - .env
-         build:
-            context: ../backend
-            dockerfile: Dockerfile
-         image: weather-dashboard-backend
-         container_name: weather-dashboard-app-backend
-         environment:
-            - MONGODB_HOST=${MONGODB_HOST}
-         ports:
-            - 8060:8060
-            - 8061:8061
-            - 8080:8080
-         networks:
-            - weather-dashboard-network
-    frontend:
-      build:
-        context: ../frontend
-        dockerfile: Dockerfile
-      image: weather-dashboard-frontend
-      container_name: weather-dashboard-app-frontend
-      ports:
-      - 3000:80
-      networks:
-      - weather-dashboard-network
+  mongodb:
+    env_file:
+    - .env
+    build:
+      context: ./mongodb
+      dockerfile: Dockerfile
+      args:
+      - mongodb_username=${MONGODB_USERNAME}
+      - mongodb_password=${MONGODB_PASSWORD}
+      - mongodb_database=${MONGODB_DATABASE}
+    image: weather-dashboard-mongodb
+    container_name: weather-dashboard-app-mongodb
+    volumes:
+    - /opt/mongodb/data/db:/data/db:rw
+    - ./mongodb/init/mongo.conf:/etc/mongo.conf
+    ports:
+    - 27017:27017
+    - 28017:28017
+    networks:
+    - weather-dashboard-network
+  redis:
+    env_file:
+    - .env
+    image: redis:5.0.4-alpine
+    container_name: weather-dashboard-app-redis
+    ports:
+    - 6379:6379
+    networks:
+    - weather-dashboard-network
+  backend:
+    env_file:
+    - .env
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: weather-dashboard-backend
+    container_name: weather-dashboard-app-backend
+    environment:
+    - MONGODB_HOST=${MONGODB_HOST}
+    ports:
+    - 8060:8060
+    - 8061:8061
+    - 8080:8080
+    networks:
+    - weather-dashboard-network
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: weather-dashboard-frontend
+    container_name: weather-dashboard-app-frontend
+    ports:
+    - 3000:80
+    networks:
+    - weather-dashboard-network
 networks:
   weather-dashboard-network:

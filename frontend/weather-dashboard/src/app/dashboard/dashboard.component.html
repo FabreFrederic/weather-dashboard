@@ -2,13 +2,17 @@
   <app-sensor-data-card
     [title]="waterTemperatureTitle"
     [subtitle]="waterTemperatureSubtitle"
-    [value]="waterTemperatureValue">
+    [lastValue]="waterTemperatureValue"
+    [minValue]="waterTemperatureMinValue"
+    [maxValue]="waterTemperatureMaxValue">
   </app-sensor-data-card>
 
   <app-sensor-data-card
     [title]="airTemperatureTitle"
     [subtitle]="airTemperatureSubtitle"
-    [value]="airTemperatureValue">
+    [lastValue]="airTemperatureValue"
+    [minValue]="airTemperatureMinValue"
+    [maxValue]="airTemperatureMaxValue">>
   </app-sensor-data-card>
 </div>
 
