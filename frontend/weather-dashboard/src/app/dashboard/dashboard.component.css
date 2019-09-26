@@ -2,6 +2,8 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
+  align-items: center;
+  height: 100%;
 }
 
 @media all and (max-width: 1000px) {

@@ -9,7 +9,7 @@ let airTemperature;
 
 const airTemperatureAddress = 'air.temperature.raw.address';
 const waterTemperatureAddress = 'water.temperature.raw.address';
-const eventBusUrl = 'http://localhost:8080/eventbus';
+const eventBusUrl = 'http://localhost:8082/eventbus';
 
 const waterSensorEnvironment = 'WATER';
 const airSensorEnvironment = 'AIR';

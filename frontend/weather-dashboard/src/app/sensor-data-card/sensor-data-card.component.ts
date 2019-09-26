@@ -17,7 +17,12 @@ export class SensorDataCardComponent {
   public minValue: number;
   @Input()
   public maxValue: number;
+  @Input()
+  public minSubtitle: string;
+  @Input()
+  public maxSubtitle: string;
 
-  constructor() {}
+  constructor() {
+  }
 
- }
+}

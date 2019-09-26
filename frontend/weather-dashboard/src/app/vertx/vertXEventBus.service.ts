@@ -5,7 +5,7 @@ import {Reading} from "../business/reading";
 import * as EventBus from 'vertx3-eventbus-client';
 
 export const VERTX_EVENTBUS_CONFIG = {
-  eventBusRoute: window.location.protocol + '//' + window.location.hostname + ':8080/eventbus',
+  eventBusRoute: window.location.protocol + '//' + window.location.hostname + ':8082/eventbus',
   airTemperatureAddress: 'air.temperature.new.address',
   airTemperatureMinAddress: 'air.temperature.min.address',
   airTemperatureMaxAddress: 'air.temperature.max.address',
@@ -107,6 +107,7 @@ export class VertXEventBusService implements OnDestroy {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
+      console.log('waterTemperatureMinCallback : {}', message.body);
       const body = JSON.parse(message.body);
       let temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable

@@ -1,6 +1,6 @@
 package io.fabre.frederic.weather.dashboard.backend.data;
 
-public enum EventBusAddresses {
+public enum EventBusAddress {
 
     AIR_TEMPERATURE_RAW_ADDRESS("air.temperature.raw.address"),
     AIR_TEMPERATURE_NEW_ADDRESS("air.temperature.new.address"),
@@ -13,7 +13,7 @@ public enum EventBusAddresses {
 
     private String value;
 
-    EventBusAddresses(final String value) {
+    EventBusAddress(final String value) {
         this.value = value;
     }
 

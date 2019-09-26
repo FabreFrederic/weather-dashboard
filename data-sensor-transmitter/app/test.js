@@ -3,7 +3,7 @@ const cron = require("node-cron");
 
 const airTemperatureAddress = 'air.temperature.raw.address';
 const waterTemperatureAddress = 'water.temperature.raw.address';
-const eventBusUrl = 'http://localhost:8080/eventbus';
+const eventBusUrl = 'http://localhost:8082/eventbus';
 
 let options = {
     // Max reconnect attempts
@@ -23,6 +23,8 @@ eventBus.enableReconnect(true);
 
 eventBus.onopen = () => {
     cron.schedule("*/5 * * * * *", function() {
+        console.log('open event bus');
+
         let waterValue = Math.floor(Math.random() * 9) + '.' + Math.floor(Math.random() * 9);
         let airValue = Math.floor(Math.random() * 6) + 1 + '.' + Math.floor(Math.random() * 6) + 1;
         let today = new Date().toISOString();

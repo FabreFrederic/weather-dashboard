@@ -1,6 +1,6 @@
 package io.fabre.frederic.weather.dashboard.backend;
 
-import io.fabre.frederic.weather.dashboard.backend.data.EventBusAddresses;
+import io.fabre.frederic.weather.dashboard.backend.data.EventBusAddress;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.ext.bridge.PermittedOptions;
@@ -16,29 +16,29 @@ public class ServerVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         BridgeOptions opts = new BridgeOptions()
                 .addInboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.AIR_TEMPERATURE_RAW_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.AIR_TEMPERATURE_RAW_ADDRESS.getValue()))
                 .addInboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.WATER_TEMPERATURE_RAW_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.WATER_TEMPERATURE_RAW_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.AIR_TEMPERATURE_NEW_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.AIR_TEMPERATURE_NEW_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.WATER_TEMPERATURE_NEW_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.WATER_TEMPERATURE_NEW_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.AIR_TEMPERATURE_MIN_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.AIR_TEMPERATURE_MIN_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.AIR_TEMPERATURE_MAX_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.AIR_TEMPERATURE_MAX_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.WATER_TEMPERATURE_MIN_ADDRESS.getValue()))
+                        new PermittedOptions().setAddress(EventBusAddress.WATER_TEMPERATURE_MIN_ADDRESS.getValue()))
                 .addOutboundPermitted(
-                        new PermittedOptions().setAddress(EventBusAddresses.WATER_TEMPERATURE_MAX_ADDRESS.getValue()));
+                        new PermittedOptions().setAddress(EventBusAddress.WATER_TEMPERATURE_MAX_ADDRESS.getValue()));
 
         SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
 
         router.route("/eventbus/*").handler(ebHandler);
         router.route().handler(StaticHandler.create());
-        vertx.createHttpServer().requestHandler(router).listen(8080);
+        vertx.createHttpServer().requestHandler(router).listen(8082);
 
-        router.route().handler(CorsHandler.create("http://localhost:8080")
+        router.route().handler(CorsHandler.create("http://localhost:8082")
                 .allowedMethod(io.vertx.core.http.HttpMethod.GET)
                 .allowedMethod(io.vertx.core.http.HttpMethod.POST)
                 .allowedMethod(io.vertx.core.http.HttpMethod.PUT)

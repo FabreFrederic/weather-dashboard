@@ -4,6 +4,7 @@ services:
   mongodb:
     env_file:
     - .env
+    - mongo.env
     build:
       context: ./mongodb
       dockerfile: Dockerfile
@@ -33,17 +34,18 @@ services:
   backend:
     env_file:
     - .env
+    - mongo.env
+    - redis.env
     build:
       context: ../backend
       dockerfile: Dockerfile
     image: weather-dashboard-backend
     container_name: weather-dashboard-app-backend
-    environment:
-    - MONGODB_HOST=${MONGODB_HOST}
     ports:
     - 8060:8060
     - 8061:8061
-    - 8080:8080
+    - 8082:8082
+    - 8085:8085
     networks:
     - weather-dashboard-network
   frontend:

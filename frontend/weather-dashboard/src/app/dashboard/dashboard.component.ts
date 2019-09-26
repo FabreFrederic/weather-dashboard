@@ -30,7 +30,11 @@ export class DashboardComponent implements OnInit {
   @Input()
   public airTemperatureValue: number;
   @Input()
+  public minSubtitle = 'Min';
+  @Input()
   public airTemperatureMinValue: number;
+  @Input()
+  public maxSubtitle = 'Max';
   @Input()
   public airTemperatureMaxValue: number;
   @Input()

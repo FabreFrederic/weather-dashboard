@@ -1,6 +1,6 @@
 package io.fabre.frederic.weather.dashboard.backend;
 
-import io.fabre.frederic.weather.dashboard.backend.data.EventBusAddresses;
+import io.fabre.frederic.weather.dashboard.backend.data.EventBusAddress;
 import io.fabre.frederic.weather.dashboard.backend.data.Reading;
 import io.fabre.frederic.weather.dashboard.backend.data.TemperatureRepository;
 import io.vertx.core.AbstractVerticle;
@@ -24,6 +24,9 @@ public class SaveReadingMongodbVerticle extends AbstractVerticle {
         saveReading();
     }
 
+    /**
+     * Save reading for the address containing "new"
+     */
     private void saveReading() {
         final TemperatureRepository repository = TemperatureRepository.createProxy(vertx, MONGO_SERVICE);
 
@@ -41,8 +44,8 @@ public class SaveReadingMongodbVerticle extends AbstractVerticle {
         });
     }
 
-    private List<EventBusAddresses> getNewReadingEventBusAddressesOnly() {
-        List<EventBusAddresses> addresses = Arrays.asList(EventBusAddresses.values());
+    private List<EventBusAddress> getNewReadingEventBusAddressesOnly() {
+        List<EventBusAddress> addresses = Arrays.asList(EventBusAddress.values());
 
         return addresses.stream().
                 filter(address -> StringUtils.containsIgnoreCase(address.getValue(), "new")).
