@@ -10,6 +10,7 @@
     <modules>
         <module>backend</module>
         <module>scheduler</module>
+        <module>sensor-registration</module>
     </modules>
 
     <properties>

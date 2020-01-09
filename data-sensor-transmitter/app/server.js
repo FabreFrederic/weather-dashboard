@@ -1,6 +1,8 @@
 'use strict';
 
 const arduinoSerialPort = require('./arduinoSerialPort');
+const getmac = require('getmac').default;
+const axios = require('axios');
 const EventBus = require('vertx3-eventbus-client');
 
 let dataSensor;
@@ -15,6 +17,19 @@ const waterSensorEnvironment = 'WATER';
 const airSensorEnvironment = 'AIR';
 
 const temperatureSensorType = 'TEMPERATURE';
+
+const macAddress = getmac();
+
+axios.post('http://localhost:9090/sensor', {
+    location: 'Berlin',
+    name: macAddress
+}).then(function (response) {
+    console.log('response.status : ', response.status);
+    console.log('The sensor has been registered');
+    onOpenEventBus();
+}).catch(function (error) {
+    console.log('error : ', error);
+});
 
 let options = {
     // Max reconnect attempts
@@ -31,45 +46,44 @@ let options = {
 const eventBus = new EventBus(eventBusUrl, options);
 eventBus.enableReconnect(true);
 
-eventBus.onclose = (param) => {
-    console.log('Event bus connection closed', param)
-};
+function onOpenEventBus() {
+    eventBus.onopen = async () => {
+        console.log('Event bus connection is open');
+        const serialport = await arduinoSerialPort.initializeSerialPort();
 
-eventBus.onopen = async () => {
-    console.log('Event bus connection is open');
-    const serialport = await arduinoSerialPort.initializeSerialPort();
+        serialport.on('data', function (data) {
+            // Identify the type of sensor
+            if (data && data.length > 4) {
+                dataSensor = String(data).trim();
+                let sensorType = dataSensor.substring(0, 4);
+                let today = new Date().toISOString();
 
-    serialport.on('data', function (data) {
-        // Identify the type of sensor
-        if (data && data.length > 4) {
-            dataSensor = String(data).trim();
-            let sensorType = dataSensor.substring(0, 4);
-            let today = new Date().toISOString();
-
-            switch (sensorType) {
-                case '*wt*':
-                    waterTemperature = dataSensor.substring(4, dataSensor.length);
-                    sendValueToEventBus(waterTemperature, today, waterTemperatureAddress,
-                        waterSensorEnvironment, temperatureSensorType);
-                    break;
-                case '*at*':
-                    airTemperature = dataSensor.substring(4, dataSensor.length);
-                    sendValueToEventBus(airTemperature, today, airTemperatureAddress,
-                        airSensorEnvironment, temperatureSensorType);
-                    break;
-                case '*ap*':
-                    break;
-                case '*ah*':
-                    break;
-                default:
-                    console.log('Error, unknown sensor type : ' + sensorType);
+                switch (sensorType) {
+                    case '*wt*':
+                        waterTemperature = dataSensor.substring(4, dataSensor.length);
+                        sendValueToEventBus(waterTemperature, today, waterTemperatureAddress,
+                            waterSensorEnvironment, temperatureSensorType);
+                        break;
+                    case '*at*':
+                        airTemperature = dataSensor.substring(4, dataSensor.length);
+                        sendValueToEventBus(airTemperature, today, airTemperatureAddress,
+                            airSensorEnvironment, temperatureSensorType);
+                        break;
+                    case '*ap*':
+                        break;
+                    case '*ah*':
+                        break;
+                    default:
+                        console.log('Error, unknown sensor type : ' + sensorType);
+                }
             }
-        }
-    });
-};
+        });
+    };
+}
 
 function sendValueToEventBus(value, date, address, sensorEnvironment, sensorType) {
-    eventBus.publish(address, '{"date":"' + date +
+    eventBus.publish(address,
+        '{"date":"' + date +
         '" ,"value":' + value +
         ' ,"sensorEnvironment":' + '"' + sensorEnvironment + '"' +
         ' ,"sensorType":' + '"' + sensorType + '"' + '}');
@@ -78,3 +92,7 @@ function sendValueToEventBus(value, date, address, sensorEnvironment, sensorType
         ' - sensor type : ' + sensorType +
         ' - address : ' + address);
 }
+
+eventBus.onclose = (param) => {
+    console.log('Event bus connection closed', param)
+};
