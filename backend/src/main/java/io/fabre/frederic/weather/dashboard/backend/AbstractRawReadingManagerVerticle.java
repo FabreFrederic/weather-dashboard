@@ -18,8 +18,6 @@ public class AbstractRawReadingManagerVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        LOGGER.info("This verticle is starting");
-
         vertx.eventBus().consumer(consumeRawReadingFromSensorAddress, message -> {
             LOGGER.info("Message receive by the consumer : {}", message.body());
 

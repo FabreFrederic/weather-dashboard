@@ -50,9 +50,9 @@ public class RedisVerticle extends AbstractVerticle {
                         final String maxKey = buildMaxRedisKeyName(reading);
 
                         final Future<Optional<String>> minCache = getCache(minKey);
-                        LOGGER.info("{} : Min value found: {}", address.getValue(), minCache.result());
                         minCache.setHandler(ar -> {
                             if (ar.succeeded()) {
+                                LOGGER.info("{} : Min value found: {}", address.getValue(), minCache.result());
                                 if (!ar.result().isPresent() ||
                                         Float.valueOf(reading.getValue()) < Float.valueOf(ar.result().get())) {
                                     publishExtremeReadingOnEventBus(minKey + ".address", message);
@@ -66,8 +66,8 @@ public class RedisVerticle extends AbstractVerticle {
                         });
 
                         final Future<Optional<String>> maxCache = getCache(maxKey);
-                        LOGGER.info("{} : Max value found: {}", address.getValue(), maxCache.result());
                         maxCache.setHandler(ar -> {
+                            LOGGER.info("{} : Max value found: {}", address.getValue(), maxCache.result());
                             if (ar.succeeded()) {
                                 if (!ar.result().isPresent() ||
                                         Float.valueOf(reading.getValue()) > Float.valueOf(ar.result().get())) {
@@ -76,6 +76,8 @@ public class RedisVerticle extends AbstractVerticle {
                                     // The new reading value is the new max value, and has to be stored in cache
                                     LOGGER.info("{} : New max value stored in cache: {}",
                                             address.getValue(), reading.getValue());
+                                    setCache(maxKey, reading);
+
                                     setCache(maxKey, reading);
                                 }
                             }
@@ -119,7 +121,11 @@ public class RedisVerticle extends AbstractVerticle {
         Redis.createClient(vertx, redisOptions).connect(onConnect -> {
             if (onConnect.succeeded()) {
                 client = onConnect.result();
-                client.exceptionHandler(e -> attemptReconnect());
+                client.exceptionHandler(e -> {
+                    LOGGER.error("Lost Redis connection", e);
+                    attemptReconnect();
+
+                });
                 LOGGER.info("Connected to Redis");
             }
             handler.handle(onConnect);
@@ -171,7 +177,6 @@ public class RedisVerticle extends AbstractVerticle {
         redisAPI.set(Arrays.asList(key, reading.getValue()), result -> {
             if (result.succeeded()) {
                 promise.complete();
-                LOGGER.info("Operation succeeded {0}", result.cause());
             } else {
                 promise.fail(result.cause());
             }
@@ -194,4 +199,5 @@ public class RedisVerticle extends AbstractVerticle {
         });
         return promise.future();
     }
+
 }
