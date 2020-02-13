@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {Subject} from "rxjs/index";
-import {Reading} from "../business/reading";
+import {Subject} from 'rxjs';
+import {Reading} from '../business/reading';
 
 import * as EventBus from 'vertx3-eventbus-client';
 
@@ -42,10 +42,10 @@ export class VertXEventBusService implements OnDestroy {
       self.eventBus.registerHandler(VERTX_EVENTBUS_CONFIG.waterTemperatureMinAddress, self.waterTemperatureMinCallback);
       self.eventBus.registerHandler(VERTX_EVENTBUS_CONFIG.waterTemperatureMaxAddress, self.waterTemperatureMaxCallback);
       self.eventBus.onclose = function () {
-        console.log("disconnected from vertx eventbus");
+        console.log('disconnected from vertx eventbus');
         self.eventBus = null;
       };
-    }
+    };
   }
 
   private airTemperatureCallback = (error: any, message: any) => {
@@ -58,39 +58,39 @@ export class VertXEventBusService implements OnDestroy {
 
       console.log(body.value);
 
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.airTemperatureVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
+  }
 
   private airTemperatureMinCallback = (error: any, message: any) => {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
       const body = JSON.parse(message.body);
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.airTemperatureMinVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
+  }
 
   private airTemperatureMaxCallback = (error: any, message: any) => {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
       const body = JSON.parse(message.body);
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.airTemperatureMaxVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
+  }
 
   private waterTemperatureCallback = (error: any, message: any) => {
     console.error(message);
@@ -99,13 +99,13 @@ export class VertXEventBusService implements OnDestroy {
       console.error(error);
     } else if (message && message.body) {
       const body = JSON.parse(message.body);
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.waterTemperatureVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
+  }
 
   private waterTemperatureMinCallback = (error: any, message: any) => {
     if (error) {
@@ -113,27 +113,26 @@ export class VertXEventBusService implements OnDestroy {
     } else if (message && message.body) {
       console.log('waterTemperatureMinCallback : {}', message.body);
       const body = JSON.parse(message.body);
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.waterTemperatureMinVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
+  }
 
   private waterTemperatureMaxCallback = (error: any, message: any) => {
     if (error) {
       console.error(error);
     } else if (message && message.body) {
       const body = JSON.parse(message.body);
-      let temperature: Reading = new Reading(body.value, body.date);
+      const temperature: Reading = new Reading(body.value, body.date);
       // Send the response to the observable
       this.waterTemperatureMaxVertxSubject.next(temperature);
     } else {
       console.log('No body in callback');
     }
-  };
-
+  }
 
   public getAirTemperatureVertxObservable() {
     return this.airTemperatureVertxSubject.asObservable();

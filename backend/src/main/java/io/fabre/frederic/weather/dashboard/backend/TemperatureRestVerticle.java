@@ -31,10 +31,16 @@ public class TemperatureRestVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(getCorsHandler());
         router.route().handler(BodyHandler.create());
+
         router.get("/air/temperatures/today").produces("application/json").
                 handler(this::getTodayAirTemperatureHandler);
         router.get("/water/temperatures/today").produces("application/json").
                 handler(this::getTodayWaterTemperatureHandler);
+
+        router.get("/air/temperature/today/last").produces("application/json").
+                handler(this::getTodayLastAirTemperatureHandler);
+        router.get("/water/temperature/today/last").produces("application/json").
+                handler(this::getTodayLastWaterTemperatureHandler);
 
         router.get("/water/temperature/today/max").produces("application/json").
                 handler(this::getTodayMaxWaterTemperatureHandler);
@@ -70,6 +76,16 @@ public class TemperatureRestVerticle extends AbstractVerticle {
     private void getTodayWaterTemperatureHandler(final RoutingContext routingContext) {
         repository.findTodayReadings(SensorEnvironment.WATER, SensorType.TEMPERATURE, res ->
                 handleMultipleReadingsResponse(routingContext, res));
+    }
+
+    private void getTodayLastAirTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayLastReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
+    }
+
+    private void getTodayLastWaterTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayLastReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
     }
 
     private void getTodayMinAirTemperatureHandler(final RoutingContext routingContext) {

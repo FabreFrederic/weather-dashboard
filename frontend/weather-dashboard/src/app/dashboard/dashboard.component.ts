@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {VertXEventBusService} from '../vertx/vertXEventBus.service';
-import {ReadingService} from '../service/reading.service';
-import {ChartConfig} from '../chart/chartConfig';
-import { Reading } from '../business/reading';
+import { Component, Input, OnInit } from '@angular/core';
+import { VertXEventBusService } from '../vertx/vertXEventBus.service';
+import { ReadingService } from '../service/reading.service';
+import { ChartConfig } from '../chart/chartConfig';
 
 @Component({
   selector: 'app-dashboard',
@@ -59,57 +58,85 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.vertXEventBusService.getAirTemperatureVertxObservable().subscribe((reading) => {
-      this.airTemperatureValue = reading.value;
-      this.airTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.airTemperatureValue = reading.value;
+        this.airTemperatureDate = reading.date;
+      }
     });
 
     this.vertXEventBusService.getAirTemperatureMinVertxObservable().subscribe((reading) => {
-      this.airTemperatureMinValue = reading.value;
-      // TODO add date field
-      // this.airTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.airTemperatureMinValue = reading.value;
+        // TODO add date field
+        // this.airTemperatureDate = reading.date;
+      }
     });
 
     this.vertXEventBusService.getAirTemperatureMaxVertxObservable().subscribe((reading) => {
-      this.airTemperatureMaxValue = reading.value;
-      // TODO add date field
-      // this.airTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.airTemperatureMaxValue = reading.value;
+        // TODO add date field
+        // this.airTemperatureDate = reading.date;
+      }
     });
 
     this.vertXEventBusService.getWaterTemperatureVertxObservable().subscribe((reading) => {
-      this.waterTemperatureValue = reading.value;
-      this.waterTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.waterTemperatureValue = reading.value;
+        this.waterTemperatureDate = reading.date;
+      }
     });
 
     this.vertXEventBusService.getWaterTemperatureMinVertxObservable().subscribe((reading) => {
-      this.waterTemperatureMinValue = reading.value;
-      // TODO add date field
-      // this.airTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.waterTemperatureMinValue = reading.value;
+        // TODO add date field
+        // this.airTemperatureDate = reading.date;
+      }
     });
 
     this.vertXEventBusService.getWaterTemperatureMaxVertxObservable().subscribe((reading) => {
-      this.waterTemperatureMaxValue = reading.value;
-      // TODO add date field
-      // this.airTemperatureDate = reading.date;
+      if (reading && reading.value) {
+        this.waterTemperatureMaxValue = reading.value;
+        // TODO add date field
+        // this.airTemperatureDate = reading.date;
+      }
+    });
+
+    this.readingService.getSingleReading('/air/temperature/today/last').subscribe((reading) => {
+      if (reading[0] && reading[0].value) {
+        this.airTemperatureValue = reading[0].value;
+      }
+    });
+
+    this.readingService.getSingleReading('/water/temperature/today/last').subscribe((reading) => {
+      if (reading[0] && reading[0].value) {
+        this.waterTemperatureValue = reading[0].value;
+      }
     });
 
     this.readingService.getSingleReading('/air/temperature/today/min').subscribe((reading) => {
-      console.log('reading: ', reading);
-      this.airTemperatureMinValue = reading[0].value;
+      if (reading[0] && reading[0].value) {
+        this.airTemperatureMinValue = reading[0].value;
+      }
     });
 
     this.readingService.getSingleReading('/air/temperature/today/max').subscribe((reading) => {
-      console.log('reading: ', reading);
-      this.airTemperatureMaxValue = reading[0].value;
+      if (reading[0] && reading[0].value) {
+        this.airTemperatureMaxValue = reading[0].value;
+      }
     });
 
     this.readingService.getSingleReading('/water/temperature/today/min').subscribe((reading) => {
-      console.log('reading: ', reading);
-      this.waterTemperatureMinValue = reading[0].value;
+      if (reading[0] && reading[0].value) {
+        this.waterTemperatureMinValue = reading[0].value;
+      }
     });
 
     this.readingService.getSingleReading('/water/temperature/today/max').subscribe((reading) => {
-      console.log('reading: ', reading);
-      this.waterTemperatureMaxValue = reading[0].value;
+      if (reading[0] && reading[0].value) {
+        this.waterTemperatureMaxValue = reading[0].value;
+      }
     });
   }
 

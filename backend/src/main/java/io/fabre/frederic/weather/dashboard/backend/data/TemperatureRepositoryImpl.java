@@ -72,6 +72,15 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
+    public TemperatureRepository findTodayLastReading(final SensorEnvironment sensorEnvironment,
+                                                      final SensorType sensorType,
+                                                      final Handler<AsyncResult<Reading>> resultHandler) {
+        final JsonObject query = buildQuery(sensorEnvironment, sensorType);
+        FindOptions options = new FindOptions().setLimit(1).setSort(new JsonObject().put(mongoDbDateFieldName, -1));
+        return findWithOptions(query, options, sensorEnvironment, sensorType, resultHandler);
+    }
+
+    @Override
     public TemperatureRepository findTodayMinReading(final SensorEnvironment sensorEnvironment,
                                                      final SensorType sensorType,
                                                      final Handler<AsyncResult<Reading>> resultHandler) {
