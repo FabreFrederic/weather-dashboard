@@ -68,46 +68,50 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
                                     sensorEnvironment.getValue(), sensorType.getValue(), err);
                             resultHandler.handle(Future.failedFuture(err.getMessage()));
                         });
-
         return this;
     }
 
     @Override
-    public TemperatureRepository findTodayMaxReading(SensorEnvironment sensorEnvironment, SensorType sensorType,
-                                                     Handler<AsyncResult<Reading>> resultHandler) {
+    public TemperatureRepository findTodayMinReading(final SensorEnvironment sensorEnvironment,
+                                                     final SensorType sensorType,
+                                                     final Handler<AsyncResult<Reading>> resultHandler) {
+        final JsonObject query = buildQuery(sensorEnvironment, sensorType);
+        FindOptions options = new FindOptions().setLimit(1).setSort(new JsonObject().put("value", 1));
+        return findWithOptions(query, options, sensorEnvironment, sensorType, resultHandler);
+    }
+
+    @Override
+    public TemperatureRepository findTodayMaxReading(final SensorEnvironment sensorEnvironment,
+                                                     final SensorType sensorType,
+                                                     final Handler<AsyncResult<Reading>> resultHandler) {
+        final JsonObject query = buildQuery(sensorEnvironment, sensorType);
+        FindOptions options = new FindOptions().setLimit(1).setSort(new JsonObject().put("value", -1));
+        return findWithOptions(query, options, sensorEnvironment, sensorType, resultHandler);
+    }
+
+    /**
+     * @param sensorEnvironment sensor environment
+     * @param sensorType        sensor type
+     * @return a query
+     */
+    private JsonObject buildQuery(final SensorEnvironment sensorEnvironment,
+                                  final SensorType sensorType) {
         final String date = getAtMidNightTodayDate();
         JsonObject query = new JsonObject().put(mongoDbDateFieldName, new JsonObject().put("$gte", date));
         query.put("sensorEnvironment", new JsonObject().put("$eq", sensorEnvironment));
         query.put("sensorType", new JsonObject().put("$eq", sensorType));
+        return query;
+    }
 
-        FindOptions options = new FindOptions().setLimit(1).setSort(new JsonObject().put("value", -1));
-
+    private TemperatureRepository findWithOptions(final JsonObject query,
+                                                  final FindOptions options,
+                                                  final SensorEnvironment sensorEnvironment,
+                                                  final SensorType sensorType,
+                                                  Handler<AsyncResult<Reading>> resultHandler) {
         mongoClient.rxFindWithOptions(Reading.COLLECTION, query, options)
                 .subscribe(rows -> {
                             final Reading reading = new Reading(rows.get(0));
                             resultHandler.handle(Future.succeededFuture(reading));
-                        },
-                        err -> {
-                            LOGGER.error("Error while retrieving today's {} {}",
-                                    sensorEnvironment.getValue(), sensorType.getValue(), err);
-                            resultHandler.handle(Future.failedFuture(err.getMessage()));
-                        });
-        return this;
-
-    }
-
-    @Override
-    public TemperatureRepository findTodayMinReading(SensorEnvironment sensorEnvironment, SensorType sensorType,
-                                                     Handler<AsyncResult<Reading>> resultHandler) {
-        final String date = getAtMidNightTodayDate();
-        JsonObject query = new JsonObject().put(mongoDbDateFieldName, new JsonObject().put("$gte", date));
-        query.put("sensorEnvironment", new JsonObject().put("$eq", sensorEnvironment));
-        query.put("sensorType", new JsonObject().put("$eq", sensorType));
-        query.put("value", new JsonObject().put("$min", sensorType));
-
-        mongoClient.rxFindOne(Reading.COLLECTION, query, null)
-                .subscribe(reading -> {
-                            resultHandler.handle(Future.succeededFuture(new Reading(reading)));
                         },
                         err -> {
                             LOGGER.error("Error while retrieving today's {} {}",
@@ -125,5 +129,3 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
         return formatter.format(todayMidnight);
     }
 }
-
-

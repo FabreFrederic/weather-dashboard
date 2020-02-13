@@ -5,6 +5,7 @@ import io.fabre.frederic.weather.dashboard.backend.data.SensorEnvironment;
 import io.fabre.frederic.weather.dashboard.backend.data.SensorType;
 import io.fabre.frederic.weather.dashboard.backend.data.TemperatureRepository;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
@@ -62,62 +63,54 @@ public class TemperatureRestVerticle extends AbstractVerticle {
     }
 
     private void getTodayAirTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayReadings(SensorEnvironment.AIR, SensorType.TEMPERATURE, res -> {
-            JsonArray jsonArray = new JsonArray();
-            List<Reading> readings = res.result();
-            readings.forEach(temperature -> jsonArray.add(JsonObject.mapFrom(temperature)));
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(jsonArray.toString());
-            response.end(jsonArray.toString());
-        });
+        repository.findTodayReadings(SensorEnvironment.AIR, SensorType.TEMPERATURE, res ->
+                handleMultipleReadingsResponse(routingContext, res));
     }
 
     private void getTodayWaterTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayReadings(SensorEnvironment.WATER, SensorType.TEMPERATURE, res -> {
-            JsonArray jsonArray = new JsonArray();
-            List<Reading> readings = res.result();
-            readings.forEach(temperature -> jsonArray.add(JsonObject.mapFrom(temperature)));
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(jsonArray.toString());
-            response.end(jsonArray.toString());
-        });
-    }
-
-    private void getTodayMaxWaterTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayMaxReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res -> {
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(res.toString());
-            response.end(res.toString());
-        });
-    }
-
-    private void getTodayMinWaterTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayMinReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res -> {
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(res.toString());
-            response.end(res.toString());
-        });
-    }
-
-    private void getTodayMaxAirTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayMaxReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res -> {
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(res.toString());
-            response.end(res.toString());
-        });
+        repository.findTodayReadings(SensorEnvironment.WATER, SensorType.TEMPERATURE, res ->
+                handleMultipleReadingsResponse(routingContext, res));
     }
 
     private void getTodayMinAirTemperatureHandler(final RoutingContext routingContext) {
-        repository.findTodayMinReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res -> {
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
-            LOGGER.info(res.toString());
-            response.end(res.toString());
-        });
+        repository.findTodayMinReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
+    }
+
+    private void getTodayMaxAirTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMaxReading(SensorEnvironment.AIR, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
+    }
+
+    private void getTodayMinWaterTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMinReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
+    }
+
+    private void getTodayMaxWaterTemperatureHandler(final RoutingContext routingContext) {
+        repository.findTodayMaxReading(SensorEnvironment.WATER, SensorType.TEMPERATURE, res ->
+                handleSingleReadingResponse(routingContext, res));
+    }
+
+    private void handleMultipleReadingsResponse(final RoutingContext routingContext,
+                                                final AsyncResult<List<Reading>> resultHandler) {
+        final JsonArray jsonArray = new JsonArray();
+        final List<Reading> readings = resultHandler.result();
+        readings.forEach(temperature -> jsonArray.add(JsonObject.mapFrom(temperature)));
+        final HttpServerResponse response = routingContext.response();
+        response.putHeader("content-type", "application/json");
+        LOGGER.info(jsonArray.toString());
+        response.end(jsonArray.toString());
+    }
+
+    private void handleSingleReadingResponse(final RoutingContext routingContext,
+                                             final AsyncResult<Reading> resultHandler) {
+        final JsonArray jsonArray = new JsonArray();
+        final Reading reading = resultHandler.result();
+        jsonArray.add(JsonObject.mapFrom(reading));
+        final HttpServerResponse response = routingContext.response();
+        response.putHeader("content-type", "application/json");
+        LOGGER.info(jsonArray.toString());
+        response.end(jsonArray.toString());
     }
 }

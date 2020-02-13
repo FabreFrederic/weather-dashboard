@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {VertXEventBusService} from "../vertx/vertXEventBus.service";
-import {ChartConfig} from "../chart/chartConfig";
+import {VertXEventBusService} from '../vertx/vertXEventBus.service';
+import {ReadingService} from '../service/reading.service';
+import {ChartConfig} from '../chart/chartConfig';
+import { Reading } from '../business/reading';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,9 +11,9 @@ import {ChartConfig} from "../chart/chartConfig";
 })
 export class DashboardComponent implements OnInit {
   @Input()
-  public waterTemperatureTitle: string = 'Temperature C°';
+  public waterTemperatureTitle = 'Temperature C°';
   @Input()
-  public waterTemperatureSubtitle: string = 'eau';
+  public waterTemperatureSubtitle = 'eau';
   @Input()
   public waterTemperatureValue: number;
   @Input()
@@ -24,9 +26,9 @@ export class DashboardComponent implements OnInit {
   public waterTemperatureConfig: ChartConfig = new ChartConfig();
 
   @Input()
-  public airTemperatureTitle: string = 'Temperature C°';
+  public airTemperatureTitle = 'Temperature C°';
   @Input()
-  public airTemperatureSubtitle: string = 'air';
+  public airTemperatureSubtitle = 'air';
   @Input()
   public airTemperatureValue: number;
   @Input()
@@ -42,16 +44,17 @@ export class DashboardComponent implements OnInit {
   @Input()
   public airTemperatureConfig: ChartConfig = new ChartConfig();
 
-  constructor(private vertXEventBusService: VertXEventBusService) {
+  constructor(private vertXEventBusService: VertXEventBusService,
+              private readingService: ReadingService) {
     this.airTemperatureConfig.url = '/air/temperatures/today';
     this.airTemperatureConfig.xAxisType = 'datetime';
     this.airTemperatureConfig.yAxisTitleText = 'temperature C°';
-    this.airTemperatureConfig.seriesName = "Temperature de l'air";
+    this.airTemperatureConfig.seriesName = 'Temperature de l\'air';
 
     this.waterTemperatureConfig.url = '/water/temperatures/today';
     this.waterTemperatureConfig.xAxisType = 'datetime';
     this.waterTemperatureConfig.yAxisTitleText = 'temperature C°';
-    this.waterTemperatureConfig.seriesName = "Temperature de l'eau";
+    this.waterTemperatureConfig.seriesName = 'Temperature de l\'eau';
   }
 
   ngOnInit(): void {
@@ -62,11 +65,13 @@ export class DashboardComponent implements OnInit {
 
     this.vertXEventBusService.getAirTemperatureMinVertxObservable().subscribe((reading) => {
       this.airTemperatureMinValue = reading.value;
+      // TODO add date field
       // this.airTemperatureDate = reading.date;
     });
 
     this.vertXEventBusService.getAirTemperatureMaxVertxObservable().subscribe((reading) => {
       this.airTemperatureMaxValue = reading.value;
+      // TODO add date field
       // this.airTemperatureDate = reading.date;
     });
 
@@ -77,14 +82,35 @@ export class DashboardComponent implements OnInit {
 
     this.vertXEventBusService.getWaterTemperatureMinVertxObservable().subscribe((reading) => {
       this.waterTemperatureMinValue = reading.value;
+      // TODO add date field
       // this.airTemperatureDate = reading.date;
     });
 
     this.vertXEventBusService.getWaterTemperatureMaxVertxObservable().subscribe((reading) => {
       this.waterTemperatureMaxValue = reading.value;
+      // TODO add date field
       // this.airTemperatureDate = reading.date;
     });
 
+    this.readingService.getSingleReading('/air/temperature/today/min').subscribe((reading) => {
+      console.log('reading: ', reading);
+      this.airTemperatureMinValue = reading[0].value;
+    });
+
+    this.readingService.getSingleReading('/air/temperature/today/max').subscribe((reading) => {
+      console.log('reading: ', reading);
+      this.airTemperatureMaxValue = reading[0].value;
+    });
+
+    this.readingService.getSingleReading('/water/temperature/today/min').subscribe((reading) => {
+      console.log('reading: ', reading);
+      this.waterTemperatureMinValue = reading[0].value;
+    });
+
+    this.readingService.getSingleReading('/water/temperature/today/max').subscribe((reading) => {
+      console.log('reading: ', reading);
+      this.waterTemperatureMaxValue = reading[0].value;
+    });
   }
 
 }
