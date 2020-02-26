@@ -21,7 +21,7 @@ public class RedisScheduler {
      * Every day at midnight - 12 am (0 0 0 * * ?)
      * Every minute : "0 * * ? * *"
      */
-    @Scheduled(cron="0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void flushAll() {
         LOGGER.info("Flush all Redis at {}", new Date());
         redisMessagePublisher.flushAll();

@@ -58,5 +58,16 @@ services:
     - 3000:80
     networks:
     - weather-dashboard-network
+  scheduler:
+    env_file:
+      - .env
+      - redis.env
+    build:
+      context: ../scheduler
+      dockerfile: Dockerfile
+    image: weather-dashboard-scheduler
+    container_name: weather-dashboard-app-scheduler
+    networks:
+      - weather-dashboard-network
 networks:
   weather-dashboard-network:
