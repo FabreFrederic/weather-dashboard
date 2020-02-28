@@ -20,17 +20,19 @@ public class MongoVerticle extends AbstractVerticle {
     @Override
     public void start() {
         LOGGER.info("This verticle is starting");
+
         ConfigStoreOptions file = new ConfigStoreOptions().setType("file").
-                setConfig(new JsonObject().put("path", "application.json"));
+                setConfig(new JsonObject().put("path", "mongo.json"));
         ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(file));
         retriever.getConfig(conf -> {
             JsonObject datasourceConfig = conf.result().getJsonObject("datasource");
             JsonObject config = new JsonObject();
             String host = System.getenv("MONGODB_HOST");
-            LOGGER.info("host : {}", host);
             if (StringUtils.isBlank(host)) {
                 host = datasourceConfig.getString("host");
             }
+
+            LOGGER.info("host : {}", host);
 
             config.put("host", host);
             config.put("port", datasourceConfig.getInteger("port"));
@@ -41,7 +43,6 @@ public class MongoVerticle extends AbstractVerticle {
             new ServiceBinder(vertx.getDelegate())
                     .setAddress(MONGO_SERVICE)
                     .register(TemperatureRepository.class, new TemperatureRepositoryImpl(mongoClient));
-
         });
     }
 

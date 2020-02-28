@@ -1,25 +1,35 @@
 <div class="card-container">
-  <app-sensor-data-card
-    [title]="waterTemperatureTitle"
-    [subtitle]="waterTemperatureSubtitle"
-    [value]="waterTemperatureValue">
-  </app-sensor-data-card>
+  <app-chart
+    [lastValue]="airTemperatureValue"
+    [lastDate]="airTemperatureDate"
+    [config]="airTemperatureConfig">
+  </app-chart>
 
   <app-sensor-data-card
     [title]="airTemperatureTitle"
     [subtitle]="airTemperatureSubtitle"
-    [value]="airTemperatureValue">
+    [lastValue]="airTemperatureValue"
+    [minSubtitle]="minSubtitle"
+    [minValue]="airTemperatureMinValue"
+    [maxSubtitle]="maxSubtitle"
+    [maxValue]="airTemperatureMaxValue">>
   </app-sensor-data-card>
 </div>
 
-<app-chart
-  [lastValue]="airTemperatureValue"
-  [lastDate]="airTemperatureDate"
-  [config]="airTemperatureConfig">
-</app-chart>
-<app-chart
-  [lastValue]="waterTemperatureValue"
-  [lastDate]="waterTemperatureDate"
-  [config]="waterTemperatureConfig">
-</app-chart>
+<div class="card-container">
+  <app-chart
+    [lastValue]="waterTemperatureValue"
+    [lastDate]="waterTemperatureDate"
+    [config]="waterTemperatureConfig">
+  </app-chart>
 
+  <app-sensor-data-card
+    [title]="waterTemperatureTitle"
+    [subtitle]="waterTemperatureSubtitle"
+    [lastValue]="waterTemperatureValue"
+    [minSubtitle]="minSubtitle"
+    [minValue]="waterTemperatureMinValue"
+    [maxSubtitle]="maxSubtitle"
+    [maxValue]="waterTemperatureMaxValue">
+  </app-sensor-data-card>
+</div>

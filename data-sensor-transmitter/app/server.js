@@ -9,7 +9,7 @@ let airTemperature;
 
 const airTemperatureAddress = 'air.temperature.raw.address';
 const waterTemperatureAddress = 'water.temperature.raw.address';
-const eventBusUrl = 'http://localhost:8080/eventbus';
+const eventBusUrl = 'http://localhost:8082/eventbus';
 
 const waterSensorEnvironment = 'WATER';
 const airSensorEnvironment = 'AIR';
@@ -71,8 +71,10 @@ eventBus.onopen = async () => {
 function sendValueToEventBus(value, date, address, sensorEnvironment, sensorType) {
     eventBus.publish(address, '{"date":"' + date +
         '" ,"value":' + value +
-        ' ,"sensorEnvironment":' + sensorEnvironment +
-        ' ,"sensorType":' + sensorType + '}');
+        ' ,"sensorEnvironment":' + '"' + sensorEnvironment + '"' +
+        ' ,"sensorType":' + '"' + sensorType + '"' + '}');
 
-    console.log('sendValueToEventBus - value : ' + value + ' address : ' + address);
+    console.log('sendValueToEventBus - value : ' + value +
+        ' - sensor type : ' + sensorType +
+        ' - address : ' + address);
 }

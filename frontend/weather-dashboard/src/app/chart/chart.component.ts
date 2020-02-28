@@ -17,7 +17,7 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
   @Input()
   public config: ChartConfig;
 
-  private chart: Chart;
+  public chart: Chart;
   private chartOptions: any;
 
   constructor(private readingService: ReadingService) {
@@ -33,7 +33,7 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
     });
 
     this.readingService.getTodayReadings(this.config.url).subscribe((readings) => {
-      let values: any[] = [];
+      const values: any[] = [];
       readings.forEach(reading => {
         values.push({
           x: +new Date(reading.date),
@@ -86,8 +86,8 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
   }
 
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
-    if (changes['lastDate'] && this.lastDate) {
-      if (this.chart) {
+    if(changes['lastDate'] && this.lastDate) {
+      if(this.chart) {
         this.chart.ref.series[0].addPoint([+new Date(this.lastDate),
           +this.lastValue], true, false);
       }

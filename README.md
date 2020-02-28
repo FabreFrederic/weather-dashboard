@@ -2,7 +2,6 @@ master branch : [![Build Status](https://travis-ci.org/FabreFrederic/weather-das
 <br />
 develop branch : [![Build Status](https://travis-ci.org/FabreFrederic/weather-dashboard.svg?branch=develop)](https://travis-ci.org/FabreFrederic/weather-dashboard)
 <br />
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/FabreFrederic/weather-dashboard.svg?columns=all)](https://waffle.io/FabreFrederic/weather-dashboard)
 
 ## Installation
 

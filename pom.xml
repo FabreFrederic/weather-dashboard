@@ -9,11 +9,12 @@
 
     <modules>
         <module>backend</module>
+        <module>scheduler</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vertx.version>3.5.3</vertx.version>
+        <vertx.version>3.8.5</vertx.version>
     </properties>
 
     <build>
