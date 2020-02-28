@@ -20,6 +20,21 @@ public interface TemperatureRepository {
                                             final SensorType sensorType,
                                             final Handler<AsyncResult<List<Reading>>> resultHandler);
 
+    @Fluent
+    TemperatureRepository findTodayLastReading(final SensorEnvironment sensorEnvironment,
+                                               final SensorType sensorType,
+                                               final Handler<AsyncResult<Reading>> resultHandler);
+
+    @Fluent
+    TemperatureRepository findTodayMaxReading(final SensorEnvironment sensorEnvironment,
+                                              final SensorType sensorType,
+                                              final Handler<AsyncResult<Reading>> resultHandler);
+
+    @Fluent
+    TemperatureRepository findTodayMinReading(final SensorEnvironment sensorEnvironment,
+                                              final SensorType sensorType,
+                                              final Handler<AsyncResult<Reading>> resultHandler);
+
     static TemperatureRepository createProxy(final Vertx vertx, final String address) {
         return new TemperatureRepositoryVertxEBProxy(vertx, address);
     }

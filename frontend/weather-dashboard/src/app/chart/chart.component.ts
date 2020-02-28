@@ -1,12 +1,8 @@
 import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {Chart} from 'angular-highcharts';
 import * as Highcharts from 'highcharts';
-import {TemperatureService} from "../service/temperature.service";
-
-interface Point {
-  x: number;
-  y: number;
-}
+import {ReadingService} from "../service/reading.service";
+import {ChartConfig} from "./chartConfig";
 
 @Component({
   selector: 'app-chart',
@@ -19,14 +15,15 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
   @Input()
   public lastDate: number;
   @Input()
-  public url: string;
+  public config: ChartConfig;
 
-  private points: Point[] = [];
+  public chart: Chart;
+  private chartOptions: any;
 
-  chart: Chart;
-  chartOptions: any;
+  constructor(private readingService: ReadingService) {
+  }
 
-  constructor(private temperatureService: TemperatureService) {
+  ngOnInit(): void {
     this.setOptions();
     this.chart = new Chart(this.chartOptions);
     Highcharts.setOptions({
@@ -34,12 +31,9 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
         timezoneOffset: new Date().getTimezoneOffset()
       }
     });
-  }
 
-  ngOnInit(): void {
-    this.temperatureService.getTodayReadings(this.url).subscribe((readings) => {
-      console.log('appel service');
-      let values: any[] = [];
+    this.readingService.getTodayReadings(this.config.url).subscribe((readings) => {
+      const values: any[] = [];
       readings.forEach(reading => {
         values.push({
           x: +new Date(reading.date),
@@ -60,11 +54,11 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
         text: null
       },
       xAxis: {
-        type: 'datetime'
+        type: this.config.xAxisType
       },
       yAxis: {
         title: {
-          text: 'Temperature C°'
+          text: this.config.yAxisTitleText
         }
       },
       credits: {
@@ -78,7 +72,7 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
       },
       series: [{
         type: 'areaspline',
-        name: 'temperature',
+        name: this.config.seriesName,
         fillColor: {
           linearGradient: {x1: 0, y1: 1, x2: 0, y2: 0},
           stops: [
@@ -86,15 +80,14 @@ export class ChartComponent implements OnInit, OnChanges, OnChanges {
             [1, '#f4f4f4']
           ]
         },
-        color: '#BBE2DE',
-        data: this.points
+        color: '#BBE2DE'
       }]
     };
   }
 
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
-    if (changes['lastDate'] && this.lastDate) {
-      if (this.chart) {
+    if(changes['lastDate'] && this.lastDate) {
+      if(this.chart) {
         this.chart.ref.series[0].addPoint([+new Date(this.lastDate),
           +this.lastValue], true, false);
       }

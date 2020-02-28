@@ -1,8 +1,0 @@
-{
-	"port" : 8081,
-	"datasource" : {
-		"host" : "localhost",
-		"port" : 27017,
-		"db_name" : "weather-dashboard-db"
-	}
-}

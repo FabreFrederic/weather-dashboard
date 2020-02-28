@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from 'environments/environment';
-import {Temperature} from '../business/temperature';
-import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import { Reading } from '../business/reading';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 // consume observable :
 // https://upgradetoangular.com/angular-news/rxjs-6-examples-in-angular-6-unsubscribe-from-observables/
@@ -20,18 +20,21 @@ Now you don't have to include your service in the providers array of your module
 @Injectable({
   providedIn: 'root'
 })
-export class TemperatureService {
+export class ReadingService {
 
   constructor(public http: HttpClient) {
   }
 
-  public getTodayReadings(url: string): Observable<Temperature[]> {
-    const airTemperatureTodayRestUrl: string = environment.restUrl + url;
-    return this.http.get<Temperature[]>(airTemperatureTodayRestUrl)
-      .pipe(
-        tap(ev => console.log(ev)),
-        catchError(this.handleError<Temperature[]>('getTodayReadings', []))
-      );
+  public getTodayReadings(url: string): Observable<Reading[]> {
+    const todayRestUrl: string = environment.restUrl + url;
+    return this.http.get<Reading[]>(todayRestUrl)
+    .pipe(catchError(this.handleError<Reading[]>('getTodayReadings', [])));
+  }
+
+  public getSingleReading(url: string): Observable<Reading> {
+    const todayRestUrl: string = environment.restUrl + url;
+    return this.http.get<Reading>(todayRestUrl)
+    .pipe(catchError(this.handleError<Reading>('getSingleReading')));
   }
 
   /**

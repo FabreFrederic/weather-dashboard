@@ -5,7 +5,21 @@
   </mat-card-header>
   <mat-card-content>
     <p class="card-value">
-      {{ value }}
+      {{ lastValue }}
+    </p>
+  </mat-card-content>
+
+  <mat-card-content>
+      <mat-card-subtitle>{{ minSubtitle }}</mat-card-subtitle>
+    <p class="card-value">
+      {{ minValue }}
+    </p>
+  </mat-card-content>
+
+  <mat-card-content>
+      <mat-card-subtitle>{{ maxSubtitle }}</mat-card-subtitle>
+    <p class="card-value">
+      {{ maxValue }}
     </p>
   </mat-card-content>
 </mat-card>

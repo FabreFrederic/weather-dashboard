@@ -4,26 +4,26 @@
 == Reading
 
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[date]]`date`|`String`|-
-|[[id]]`id`|`String`|-
-|[[sensorEnvironment]]`sensorEnvironment`|`link:enums.html#SensorEnvironment[SensorEnvironment]`|-
-|[[sensorType]]`sensorType`|`link:enums.html#SensorType[SensorType]`|-
-|[[value]]`value`|`String`|-
+|[[date]]`@date`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[sensorEnvironment]]`@sensorEnvironment`|`link:enums.html#SensorEnvironment[SensorEnvironment]`|-
+|[[sensorType]]`@sensorType`|`link:enums.html#SensorType[SensorType]`|-
+|[[value]]`@value`|`String`|-
 |===
 
 [[Sensor]]
 == Sensor
 
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
 |===
 

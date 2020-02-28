@@ -7,7 +7,7 @@ ENV VERTICLE_FILE weather-dashboard.jar
 # Set the location of the verticles
 ENV VERTICLE_HOME /usr/verticles
 
-EXPOSE 8080
+EXPOSE 8082
 
 # Copy your fat jar to the container
 COPY target/$VERTICLE_FILE $VERTICLE_HOME/
